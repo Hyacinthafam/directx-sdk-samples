@@ -416,7 +416,7 @@ HRESULT InitDevice()
     {
         { XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
         { XMFLOAT3(radius*XMScalarCos(XM_PI/3), 1.0f, radius*XMScalarSin(3.14/3)), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(3.14 *2 / 3), 1.0f, radius * XMScalarSin(3.14*2 / 3)), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
+        { XMFLOAT3(radius * XMScalarCos(3.17 *2 / 3), 1.0f, radius * XMScalarSin(3.14*2 / 3)), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
         { XMFLOAT3(radius * XMScalarCos(3.14 *3/ 3), 1.0f, radius * XMScalarSin(3.14*3 / 3)), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
         { XMFLOAT3(radius * XMScalarCos(3.14 *4/ 3), 1.0f, radius * XMScalarSin(3.14*4 / 3)), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
         { XMFLOAT3(radius * XMScalarCos(3.14 *5/ 3), 1.0f, radius * XMScalarSin(3.14*5 / 3)), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
