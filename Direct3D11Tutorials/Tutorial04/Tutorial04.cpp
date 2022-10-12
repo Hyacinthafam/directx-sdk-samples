@@ -416,11 +416,11 @@ HRESULT InitDevice()
     {
         { XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
         { XMFLOAT3(radius*XMScalarCos(XM_PI/3), 1.0f, radius*XMScalarSin(3.14/3)), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(3.17 *2 / 3), 1.0f, radius * XMScalarSin(3.14*2 / 3)), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(3.14 *3/ 3), 1.0f, radius * XMScalarSin(3.14*3 / 3)), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(3.14 *4/ 3), 1.0f, radius * XMScalarSin(3.14*4 / 3)), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(3.14 *5/ 3), 1.0f, radius * XMScalarSin(3.14*5 / 3)), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(3.14 *6/ 3), 1.0f, radius * XMScalarSin(3.14*6 / 3)), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) }
+        { XMFLOAT3(radius * XMScalarCos(XM_PI *2 / 3), 1.0f, radius * XMScalarSin(XM_PI*2 / 3)), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
+        { XMFLOAT3(radius * XMScalarCos(XM_PI *3/ 3), 1.0f, radius * XMScalarSin(XM_PI *3 / 3)), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(radius * XMScalarCos(XM_PI *4/ 3), 1.0f, radius * XMScalarSin(XM_PI *4 / 3)), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
+        { XMFLOAT3(radius * XMScalarCos(XM_PI *5/ 3), 1.0f, radius * XMScalarSin(XM_PI *5 / 3)), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(radius * XMScalarCos(XM_PI *6/ 3), 1.0f, radius * XMScalarSin(XM_PI *6 / 3)), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) }
 
         /*{XMFLOAT3(-1.0f, 1.0f, -2.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)},
         { XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
@@ -451,8 +451,7 @@ HRESULT InitDevice()
     // Create index buffer
     WORD indices[] =
     {
-       0,1,2,
-        0,2,3,0,3,4,0,4,5,0,5,6,0,6,1, -1
+       0,1,2,0,2,3,0,3,4,0,4,5,0,5,6,0,6,1, -1
         /*-2,0,3,
          3,4,5,
         -5,3,4,
@@ -472,6 +471,8 @@ HRESULT InitDevice()
           6,4,5,
           6,4,5,
           7,4,6,*/
+
+        -1,1,2,0,2,3,0,3,4,0,4,5,0,5,6,0,6,1
     };
     bd.Usage = D3D11_USAGE_DEFAULT;
     bd.ByteWidth = sizeof(WORD) * 36;        // 36 vertices needed for 12 triangles in a triangle list
