@@ -472,7 +472,7 @@ HRESULT InitDevice()
           6,4,5,
           7,4,6,*/
 
-        -1,1,2,0,2,3,0,3,4,0,4,5,0,5,6,0,6,1
+        1,7,8,0,8,9,0,9,10,0,10,11,0,11,12,0,12,7
     };
     bd.Usage = D3D11_USAGE_DEFAULT;
     bd.ByteWidth = sizeof(WORD) * 36;        // 36 vertices needed for 12 triangles in a triangle list
