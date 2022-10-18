@@ -409,43 +409,87 @@ HRESULT InitDevice()
     if (FAILED(hr))
         return hr;
 
-    const auto radius = 1.0f;
-    //const auto pi = 3.14;
+    /*const auto radius = 1.0f;
+    const auto pi = 3.14;*/
+
+    const int m = 10;
+   const  int n = 10;
+    float w = 150.0f;
+    float d = 150.0f;
+
+    float halfWidth = 0.5f * w;
+
+    float halfDepth = 0.5f * d;
+
+    float dx = w / (n - 1);
+
+    float dz = d / (m - 1);
+
+    constexpr  auto nVertices = m * n;
+
+    constexpr  auto nStrips = (m - 1) * (n - 1) * 2;
+
+    SimpleVertex gridVertices[100] = {};
+
+    for (int i = 0; i < m; ++i) {
+
+        float z = halfDepth - i * dz;
+
+        for (int j = 0; j < n; ++j) {
+
+            float x = -halfWidth + j * dx;
+
+            gridVertices[i * n + j].Pos = XMFLOAT3(x, 0.0f, z);
+
+            gridVertices[i * n + j].Color = XMFLOAT4(1.0f, 1.0f, 1.0f, 0.0f);
+
+        }
+
+    };
+
+
+
     // Create vertex buffer
 
-    SimpleVertex vertices[] =
+    
+
+   ///* SimpleVertex vertices[] =
 
 
-    {
-        { XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
-        { XMFLOAT3(radius*XMScalarCos(XM_PI/3), 1.0f, radius*XMScalarSin(3.14/3)), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(XM_PI *2 / 3), 1.0f, radius * XMScalarSin(XM_PI*2 / 3)), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(XM_PI *3/ 3), 1.0f, radius * XMScalarSin(XM_PI *3 / 3)), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(XM_PI *4/ 3), 1.0f, radius * XMScalarSin(XM_PI *4 / 3)), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(XM_PI *5/ 3), 1.0f, radius * XMScalarSin(XM_PI *5 / 3)), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(XM_PI *6/ 3), 1.0f, radius * XMScalarSin(XM_PI *6 / 3)), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
+   // {
 
 
-       // //{ XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
-       // //{ XMFLOAT3(radius * XMScalarCos(XM_PI / 3), -1.0f, radius * XMScalarSin(3.14 / 3)), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-       // //{ XMFLOAT3(radius * XMScalarCos(XM_PI * 2 / 3), -1.0f, radius * XMScalarSin(XM_PI * 2 / 3)), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
-       // //{ XMFLOAT3(radius * XMScalarCos(XM_PI * 3 / 3), -1.0f, radius * XMScalarSin(XM_PI * 3 / 3)), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-       // //{ XMFLOAT3(radius * XMScalarCos(XM_PI * 4 / 3), -1.0f, radius * XMScalarSin(XM_PI * 4 / 3)), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
-       // //{ XMFLOAT3(radius * XMScalarCos(XM_PI * 5 / 3), -1.0f, radius * XMScalarSin(XM_PI * 5 / 3)), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-       // //{ XMFLOAT3(radius * XMScalarCos(XM_PI * 6 / 3), -1.0f, radius * XMScalarSin(XM_PI * 6 / 3)), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
+   //    
+
+   //     { XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
+   //     { XMFLOAT3(radius*XMScalarCos(XM_PI/3), 1.0f, radius*XMScalarSin(3.14/3)), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
+   //     { XMFLOAT3(radius * XMScalarCos(XM_PI *2 / 3), 1.0f, radius * XMScalarSin(XM_PI*2 / 3)), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
+   //     { XMFLOAT3(radius * XMScalarCos(XM_PI *3/ 3), 1.0f, radius * XMScalarSin(XM_PI *3 / 3)), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
+   //     { XMFLOAT3(radius * XMScalarCos(XM_PI *4/ 3), 1.0f, radius * XMScalarSin(XM_PI *4 / 3)), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
+   //     { XMFLOAT3(radius * XMScalarCos(XM_PI *5/ 3), 1.0f, radius * XMScalarSin(XM_PI *5 / 3)), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+   //     { XMFLOAT3(radius * XMScalarCos(XM_PI *6/ 3), 1.0f, radius * XMScalarSin(XM_PI *6 / 3)), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
 
 
-       // 
-       //
-       ///* {XMFLOAT3(0.0f, -2.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)},
-       // { XMFLOAT3(0.5f, -2.0f, -1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-       // { XMFLOAT3(1.0f, -2.0f, 0.0f), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
-       // { XMFLOAT3(0.5f, -2.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-       // { XMFLOAT3(-0.5f, -1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
-       // { XMFLOAT3(-1.0f, -2.0f, 0.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-       // { XMFLOAT3(-0.5f, -2.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },*/
-       //// { XMFLOAT3(1.0f, -2.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) },
-    };
+   //     { XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
+   //     { XMFLOAT3(radius * XMScalarCos(XM_PI / 3), -1.0f, radius * XMScalarSin(3.14 / 3)), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
+   //     { XMFLOAT3(radius * XMScalarCos(XM_PI * 2 / 3), -1.0f, radius * XMScalarSin(XM_PI * 2 / 3)), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
+   //     { XMFLOAT3(radius * XMScalarCos(XM_PI * 3 / 3), -1.0f, radius * XMScalarSin(XM_PI * 3 / 3)), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
+   //     { XMFLOAT3(radius * XMScalarCos(XM_PI * 4 / 3), -1.0f, radius * XMScalarSin(XM_PI * 4 / 3)), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
+   //     { XMFLOAT3(radius * XMScalarCos(XM_PI * 5 / 3), -1.0f, radius * XMScalarSin(XM_PI * 5 / 3)), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+   //     { XMFLOAT3(radius * XMScalarCos(XM_PI * 6 / 3), -1.0f, radius * XMScalarSin(XM_PI * 6 / 3)), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
+
+
+   //     
+   //    
+   //    /* {XMFLOAT3(0.0f, -2.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)},
+   //     { XMFLOAT3(0.5f, -2.0f, -1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
+   //     { XMFLOAT3(1.0f, -2.0f, 0.0f), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
+   //     { XMFLOAT3(0.5f, -2.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
+   //     { XMFLOAT3(-0.5f, -1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
+   //     { XMFLOAT3(-1.0f, -2.0f, 0.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+   //     { XMFLOAT3(-0.5f, -2.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },*/
+   //     { XMFLOAT3(1.0f, -2.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) },
+   // };*/
     D3D11_BUFFER_DESC bd = {};
     bd.Usage = D3D11_USAGE_DEFAULT;
     bd.ByteWidth = sizeof(SimpleVertex) * 14;
@@ -453,7 +497,7 @@ HRESULT InitDevice()
     bd.CPUAccessFlags = 0;
 
     D3D11_SUBRESOURCE_DATA InitData = {};
-    InitData.pSysMem = vertices;
+    InitData.pSysMem = gridVertices;
     hr = g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pVertexBuffer);
     if (FAILED(hr))
         return hr;
@@ -464,63 +508,99 @@ HRESULT InitDevice()
     g_pImmediateContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer, &stride, &offset);
 
     // Create index buffer
-    WORD indices[] =
-    {
-       6,0,1,
-       1,0,2,
-       2,0,3,
-       3,0,4,
-       4,0,5,
-       5,0,6,
-        //6,0,1,
-        /*-2,0,3,
-         3,4,5,
-        -5,3,4,
+    //WORD indices[] =
+    //{
+    //   6,0,1,
+    //   1,0,2,
+    //   2,0,3,
+    //   3,0,4,
+    //   4,0,5,
+    //   5,0,6,
+    //    //6,0,1,
+    //    /*-2,0,3,
+    //     3,4,5,
+    //    -5,3,4,
 
 
-         0,5,4,
-         1,5,0,
+    //     0,5,4,
+    //     1,5,0,
 
-         3,4,7,
-         0,4,3,
+    //     3,4,7,
+    //     0,4,3,
 
-         1,6,5,
-         2,6,1,
+    //     1,6,5,
+    //     2,6,1,
 
-         2,7,6,
-         // 3,1,2,
-          6,4,5,
-          6,4,5,
-          7,4,6,*/
+    //     2,7,6,
+    //     // 3,1,2,
+    //      6,4,5,
+    //      6,4,5,
+    //      7,4,6,*/
 
-       //7,13,8,
-       //8,7,9,
-       //9,7,10,
-       //10,7,11,
-       //11,7,12,
-       //12,7,13,
-      // 13,7,8,
+    //   //7,13,8,
+    //   //8,7,9,
+    //   //9,7,10,
+    //   //10,7,11,
+    //   //11,7,12,
+    //   //12,7,13,
+    //  // 13,7,8,
 
 
-     /* 5,6,13,
-      5,12,13,
-      6,13,1,
-      1,13,8,
-      1,8,9,
-      1,9,2,
-      2,9,3,
-      3,10,4,
-      4,10,11,
-      4,11,12,
-      12,4,5,*/
+    // /* 5,6,13,
+    //  5,12,13,
+    //  6,13,1,
+    //  1,13,8,
+    //  1,8,9,
+    //  1,9,2,
+    //  2,9,3,
+    //  3,10,4,
+    //  4,10,11,
+    //  4,11,12,
+    //  12,4,5,*/
 
+
+    //};
+
+    WORD gridIndices[nStrips * 3] = {};
+
+    int k = 0;
+
+
+
+    for (int i = 0; i < m - 1; ++i) {
+
+        for (int j = 0; j < n - 1; ++j) {
+
+
+
+            gridIndices[k] = i * n + j;
+
+            gridIndices[k + 1] = i * n + (j + 1);
+
+            gridIndices[k + 2] = (i + 1) * n + j;
+
+            gridIndices[k + 3] = (i + 1) * n + j;
+
+            gridIndices[k + 4] = i * n + (j + 1);
+
+            gridIndices[k + 5] = (i + 1) * n + (j + 1);
+
+
+
+            k += 6;
+
+        }
 
     };
+
+
+
+
     bd.Usage = D3D11_USAGE_DEFAULT;
     bd.ByteWidth = sizeof(WORD) * 72;        // 36 vertices needed for 12 triangles in a triangle list
     bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
     bd.CPUAccessFlags = 0;
-    InitData.pSysMem = indices;
+    InitData.pSysMem = gridIndices;
     hr = g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pIndexBuffer);
     if (FAILED(hr))
         return hr;
