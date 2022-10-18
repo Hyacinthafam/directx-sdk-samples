@@ -422,7 +422,7 @@ HRESULT InitDevice()
 
     float dx = w / (n - 1);
 
-    float dz = d / (m - 1);
+    //float dz = d / (m - 1);
 
     constexpr  auto nVertices = m * n;
 
