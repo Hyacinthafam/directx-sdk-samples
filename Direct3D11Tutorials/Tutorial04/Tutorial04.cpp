@@ -455,7 +455,13 @@ HRESULT InitDevice()
     // Create index buffer
     WORD indices[] =
     {
-       0,1,2,0,2,3,0,3,4,0,4,5,0,5,6,0,6,1, -1,
+       6,0,1,
+       1,0,2,
+       2,0,3,
+       3,0,4,
+       4,0,5,
+       5,0,6,
+        //6,0,1,
         /*-2,0,3,
          3,4,5,
         -5,3,4,
@@ -476,10 +482,17 @@ HRESULT InitDevice()
           6,4,5,
           7,4,6,*/
 
-       7,8,9,7,9,10,7,10,11,7,11,12,7,12,13,7,13,8
+       7,13,8,
+       8,7,9,
+       9,7,10,
+       10,7,11,
+       11,7,12,
+       12,7,13,
+      // 13,7,8,
+
     };
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(WORD) * 36;        // 36 vertices needed for 12 triangles in a triangle list
+    bd.ByteWidth = sizeof(WORD) * 54;        // 36 vertices needed for 12 triangles in a triangle list
     bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
     bd.CPUAccessFlags = 0;
     InitData.pSysMem = indices;
