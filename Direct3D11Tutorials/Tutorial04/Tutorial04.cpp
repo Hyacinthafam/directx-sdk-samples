@@ -409,8 +409,7 @@ HRESULT InitDevice()
     if (FAILED(hr))
         return hr;
 
-    /*const auto radius = 1.0f;
-    const auto pi = 3.14;*/
+    
 
     const int m = 10;
    const  int n = 10;
@@ -441,7 +440,7 @@ HRESULT InitDevice()
 
             gridVertices[i * n + j].Pos = XMFLOAT3(x, 0.0f, z);
 
-            gridVertices[i * n + j].Color = XMFLOAT4(1.0f, 1.0f, 1.0f, 0.0f);
+            gridVertices[i * n + j].Color = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 
         }
 
@@ -451,9 +450,10 @@ HRESULT InitDevice()
 
     // Create vertex buffer
 
-    
+   // const auto radius = 1.0f;
+   // const auto pi = 3.14;
 
-   ///* SimpleVertex vertices[] =
+   //SimpleVertex vertices[] =
 
 
    // {
@@ -479,17 +479,17 @@ HRESULT InitDevice()
    //     { XMFLOAT3(radius * XMScalarCos(XM_PI * 6 / 3), -1.0f, radius * XMScalarSin(XM_PI * 6 / 3)), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
 
 
-   //     
-   //    
-   //    /* {XMFLOAT3(0.0f, -2.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)},
-   //     { XMFLOAT3(0.5f, -2.0f, -1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-   //     { XMFLOAT3(1.0f, -2.0f, 0.0f), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
-   //     { XMFLOAT3(0.5f, -2.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-   //     { XMFLOAT3(-0.5f, -1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
-   //     { XMFLOAT3(-1.0f, -2.0f, 0.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-   //     { XMFLOAT3(-0.5f, -2.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },*/
-   //     { XMFLOAT3(1.0f, -2.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) },
-   // };*/
+   ////     
+   ////    
+   ////    /* {XMFLOAT3(0.0f, -2.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)},
+   ////     { XMFLOAT3(0.5f, -2.0f, -1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
+   ////     { XMFLOAT3(1.0f, -2.0f, 0.0f), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
+   ////     { XMFLOAT3(0.5f, -2.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
+   ////     { XMFLOAT3(-0.5f, -1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
+   ////     { XMFLOAT3(-1.0f, -2.0f, 0.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+   ////     { XMFLOAT3(-0.5f, -2.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
+   ////     { XMFLOAT3(1.0f, -2.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) },*/
+   //      };
     D3D11_BUFFER_DESC bd = {};
     bd.Usage = D3D11_USAGE_DEFAULT;
     bd.ByteWidth = sizeof(SimpleVertex) * 14;
@@ -537,16 +537,16 @@ HRESULT InitDevice()
     //      6,4,5,
     //      7,4,6,*/
 
-    //   //7,13,8,
-    //   //8,7,9,
-    //   //9,7,10,
-    //   //10,7,11,
-    //   //11,7,12,
-    //   //12,7,13,
-    //  // 13,7,8,
+    //   7,13,8,
+    //   8,7,9,
+    //   9,7,10,
+    //   10,7,11,
+    //   11,7,12,
+    //   12,7,13,
+    //   13,7,8,
 
 
-    // /* 5,6,13,
+    // 5,6,13,
     //  5,12,13,
     //  6,13,1,
     //  1,13,8,
@@ -556,7 +556,7 @@ HRESULT InitDevice()
     //  3,10,4,
     //  4,10,11,
     //  4,11,12,
-    //  12,4,5,*/
+    //  12,4,5,
 
 
     //};
@@ -597,7 +597,7 @@ HRESULT InitDevice()
 
 
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(WORD) * 72;        // 36 vertices needed for 12 triangles in a triangle list
+    bd.ByteWidth = sizeof(WORD) * nStrips * 3;        // 36 vertices needed for 12 triangles in a triangle list
     bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
     bd.CPUAccessFlags = 0;
     InitData.pSysMem = gridIndices;
@@ -734,7 +734,7 @@ void Render()
     g_pImmediateContext->VSSetShader(g_pVertexShader, nullptr, 0);
     g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
     g_pImmediateContext->PSSetShader(g_pPixelShader, nullptr, 0);
-    g_pImmediateContext->DrawIndexed(72, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
+    g_pImmediateContext->DrawIndexed( 72, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
 
     //
     // Present our back buffer to our front buffer
