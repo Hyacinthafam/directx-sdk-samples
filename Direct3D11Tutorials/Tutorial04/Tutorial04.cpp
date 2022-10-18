@@ -410,7 +410,7 @@ HRESULT InitDevice()
         return hr;
 
     const auto radius = 1.0f;
-    //const auto pi = 3.14;
+    const auto pi = 3.14;
     // Create vertex buffer
 
     SimpleVertex vertices[] =
