@@ -412,34 +412,34 @@ HRESULT InitDevice()
     /*const auto radius = 1.0f;
     const auto pi = 3.14;*/
 
-    const int m = 10;
-   const  int n = 10;
-    float w = 150.0f;
-    float d = 150.0f;
+    const int m = 5;
+   const  int n = 5;
+    float w = -1.0f;
+    float d = 1.0f;
 
     float halfWidth = 0.5f * w;
 
     float halfDepth = -1.5f * d;
 
-    float dx = w / (y - 1);
+    float dx = w / (n - 1);
 
     float dz = d / (m - 1);
 
-    constexpr  auto nVertices = x * y;
+    constexpr  auto nVertices = m * n;
 
-    constexpr  auto nStrips = (x - 1) * (y - 1) * 2;
+    constexpr  auto nStrips = (m - 1) * (n - 1) * 2;
 
     SimpleVertex gridVertices[100] = {};
 
-    for (int i = 0; i < x; ++i) {
+    for (int i = 0; i < m; ++i) {
 
         float z = halfDepth - i * dz;
 
-        for (int j = 0; j < y; ++j) {
+        for (int j = 0; j < n; ++j) {
 
             float x = -halfWidth + j * dx;
 
-            gridVertices[i * y + j].Pos = XMFLOAT3(x, 0.0f, z);
+            gridVertices[i * n + j].Pos = XMFLOAT3(x, 0.0f, z);
 
 
             gridVertices[i * n + j].Color = XMFLOAT4(1.0f, 1.0f, 1.0f, 0.0f);
@@ -569,23 +569,23 @@ HRESULT InitDevice()
 
 
 
-    for (int i = 0; i < x - 1; ++i) {
+    for (int i = 0; i < m - 1; ++i) {
 
-        for (int j = 0; j < y - 1; ++j) {
+        for (int j = 0; j < n - 1; ++j) {
 
 
 
-            gridIndices[k] = i * y + j;
+            gridIndices[k] = i * n + j;
 
-            gridIndices[k + 1] = i * y + (j + 1);
+            gridIndices[k + 1] = i * n + (j + 1);
 
-            gridIndices[k + 2] = (i + 1) * y + j;
+            gridIndices[k + 2] = (i + 1) * n + j;
 
-            gridIndices[k + 3] = (i + 1) * y + j;
+            gridIndices[k + 3] = (i + 1) * n + j;
 
-            gridIndices[k + 4] = i * y + (j + 1);
+            gridIndices[k + 4] = i * n + (j + 1);
 
-            gridIndices[k + 5] = (i + 1) * y + (j + 1);
+            gridIndices[k + 5] = (i + 1) * n + (j + 1);
 
 
 
@@ -736,7 +736,7 @@ void Render()
     g_pImmediateContext->VSSetShader(g_pVertexShader, nullptr, 0);
     g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
     g_pImmediateContext->PSSetShader(g_pPixelShader, nullptr, 0);
-    g_pImmediateContext->DrawIndexed(72, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
+    g_pImmediateContext->DrawIndexed(80*3, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
 
     //
     // Present our back buffer to our front buffer
