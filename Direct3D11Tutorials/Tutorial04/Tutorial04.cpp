@@ -412,7 +412,7 @@ HRESULT InitDevice()
     /*const auto radius = 1.0f;
     const auto pi = 3.14;*/
 
-    const int m = 5;
+    const int m = 7;
    const  int n = 5;
     float w = -1.0f;
     float d = 1.0f;
