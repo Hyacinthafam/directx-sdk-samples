@@ -450,35 +450,35 @@ HRESULT InitDevice()
 
 
 
-    // Create vertex buffer
+    /* Create vertex buffer
 
-   // const auto radius = 1.0f;
-   // const auto pi = 3.14;
+    const auto radius = 1.0f;
+    const auto pi = 3.14;
 
-   //SimpleVertex vertices[] =
-
-
-   // {
+   SimpleVertex vertices[] =
 
 
-   //    
-
-   //     { XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
-   //     { XMFLOAT3(radius*XMScalarCos(XM_PI/3), 1.0f, radius*XMScalarSin(3.14/3)), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-   //     { XMFLOAT3(radius * XMScalarCos(XM_PI *2 / 3), 1.0f, radius * XMScalarSin(XM_PI*2 / 3)), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
-   //     { XMFLOAT3(radius * XMScalarCos(XM_PI *3/ 3), 1.0f, radius * XMScalarSin(XM_PI *3 / 3)), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-   //     { XMFLOAT3(radius * XMScalarCos(XM_PI *4/ 3), 1.0f, radius * XMScalarSin(XM_PI *4 / 3)), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
-   //     { XMFLOAT3(radius * XMScalarCos(XM_PI *5/ 3), 1.0f, radius * XMScalarSin(XM_PI *5 / 3)), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-   //     { XMFLOAT3(radius * XMScalarCos(XM_PI *6/ 3), 1.0f, radius * XMScalarSin(XM_PI *6 / 3)), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
+    {
 
 
-   //     { XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
-   //     { XMFLOAT3(radius * XMScalarCos(XM_PI / 3), -1.0f, radius * XMScalarSin(3.14 / 3)), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-   //     { XMFLOAT3(radius * XMScalarCos(XM_PI * 2 / 3), -1.0f, radius * XMScalarSin(XM_PI * 2 / 3)), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
-   //     { XMFLOAT3(radius * XMScalarCos(XM_PI * 3 / 3), -1.0f, radius * XMScalarSin(XM_PI * 3 / 3)), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-   //     { XMFLOAT3(radius * XMScalarCos(XM_PI * 4 / 3), -1.0f, radius * XMScalarSin(XM_PI * 4 / 3)), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
-   //     { XMFLOAT3(radius * XMScalarCos(XM_PI * 5 / 3), -1.0f, radius * XMScalarSin(XM_PI * 5 / 3)), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-   //     { XMFLOAT3(radius * XMScalarCos(XM_PI * 6 / 3), -1.0f, radius * XMScalarSin(XM_PI * 6 / 3)), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
+       
+
+        { XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
+        { XMFLOAT3(radius*XMScalarCos(XM_PI/3), 1.0f, radius*XMScalarSin(3.14/3)), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(radius * XMScalarCos(XM_PI *2 / 3), 1.0f, radius * XMScalarSin(XM_PI*2 / 3)), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
+        { XMFLOAT3(radius * XMScalarCos(XM_PI *3/ 3), 1.0f, radius * XMScalarSin(XM_PI *3 / 3)), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(radius * XMScalarCos(XM_PI *4/ 3), 1.0f, radius * XMScalarSin(XM_PI *4 / 3)), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
+        { XMFLOAT3(radius * XMScalarCos(XM_PI *5/ 3), 1.0f, radius * XMScalarSin(XM_PI *5 / 3)), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(radius * XMScalarCos(XM_PI *6/ 3), 1.0f, radius * XMScalarSin(XM_PI *6 / 3)), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
+
+
+        { XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
+        { XMFLOAT3(radius * XMScalarCos(XM_PI / 3), -1.0f, radius * XMScalarSin(3.14 / 3)), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(radius * XMScalarCos(XM_PI * 2 / 3), -1.0f, radius * XMScalarSin(XM_PI * 2 / 3)), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
+        { XMFLOAT3(radius * XMScalarCos(XM_PI * 3 / 3), -1.0f, radius * XMScalarSin(XM_PI * 3 / 3)), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(radius * XMScalarCos(XM_PI * 4 / 3), -1.0f, radius * XMScalarSin(XM_PI * 4 / 3)), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
+        { XMFLOAT3(radius * XMScalarCos(XM_PI * 5 / 3), -1.0f, radius * XMScalarSin(XM_PI * 5 / 3)), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(radius * XMScalarCos(XM_PI * 6 / 3), -1.0f, radius * XMScalarSin(XM_PI * 6 / 3)), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },*/
 
 
    ////     
