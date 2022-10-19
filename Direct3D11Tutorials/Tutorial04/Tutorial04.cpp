@@ -413,7 +413,7 @@ HRESULT InitDevice()
     const auto pi = 3.14;*/
 
     const int m = 7;
-   const  int n = 5;
+   const  int n = 8;
     float w = -1.0f;
     float d = 1.0f;
 
@@ -599,7 +599,7 @@ HRESULT InitDevice()
 
 
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(WORD) * 72;        // 36 vertices needed for 12 triangles in a triangle list
+    bd.ByteWidth = sizeof(WORD) * nStrips * 3;        // 36 vertices needed for 12 triangles in a triangle list
     bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
     bd.CPUAccessFlags = 0;
     InitData.pSysMem = gridIndices;
@@ -736,7 +736,7 @@ void Render()
     g_pImmediateContext->VSSetShader(g_pVertexShader, nullptr, 0);
     g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
     g_pImmediateContext->PSSetShader(g_pPixelShader, nullptr, 0);
-    g_pImmediateContext->DrawIndexed(80*3, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
+    g_pImmediateContext->DrawIndexed(320, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
 
     //
     // Present our back buffer to our front buffer
