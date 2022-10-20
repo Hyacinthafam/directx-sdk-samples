@@ -626,9 +626,9 @@ HRESULT InitDevice()
     g_World = XMMatrixIdentity();
 
     // Initialize the view matrix
-    XMVECTOR Eye = XMVectorSet(-2.0f,-5.0f, -5.0f, 0.0f);
-    XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-    XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+    XMVECTOR Eye = XMVectorSet(0.0f, 4.0f,-5.0f, 0.0f);
+    XMVECTOR At = XMVectorSet(0.0f, 2.0f, 0.0f, 0.0f);
+    XMVECTOR Up = XMVectorSet(5.0f, 2.0f, 0.0f, 0.0f);
     g_View = XMMatrixLookAtLH(Eye, At, Up);
 
     // Initialize the projection matrix
@@ -736,7 +736,7 @@ void Render()
     g_pImmediateContext->VSSetShader(g_pVertexShader, nullptr, 0);
     g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
     g_pImmediateContext->PSSetShader(g_pPixelShader, nullptr, 0);
-    g_pImmediateContext->DrawIndexed(320, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
+    g_pImmediateContext->DrawIndexed(420, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
 
     //
     // Present our back buffer to our front buffer
