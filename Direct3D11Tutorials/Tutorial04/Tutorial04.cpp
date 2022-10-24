@@ -19,6 +19,10 @@
 #include <directxmath.h>
 #include <directxcolors.h>
 #include "resource.h"
+#include <assimp/Importer.hpp>       
+#include <assimp/scene.h>            
+#include <assimp/postprocess.h>   
+//Assimp::Importer::ReadFile()
 
 using namespace DirectX;
 
