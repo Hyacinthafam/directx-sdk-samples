@@ -620,7 +620,7 @@ void Render()
     XMMATRIX mSpin3 = XMMatrixRotationZ(-t);
     XMMATRIX mOrbit3 = XMMatrixRotationY(-t * 2.0f);
     XMMATRIX mTranslate3 = XMMatrixTranslation(-4.5f, 2.0f, 3.5f);
-    XMMATRIX mScale3 = XMMatrixScaling(0.3f, 0.1f, 0.3f);
+    XMMATRIX mScale3 = XMMatrixScaling(0.3f, 0.1f, 0.4f);
 
     g_World3 = mScale3 * mSpin3 * mTranslate3 * mOrbit3;
 
