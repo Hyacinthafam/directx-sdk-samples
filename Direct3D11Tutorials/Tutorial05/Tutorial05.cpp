@@ -436,27 +436,27 @@ HRESULT InitDevice()
     // Create vertex buffer
     SimpleVertex vertices[] =
     {
-       /* { XMFLOAT3( -1.0f, 5.0f, 2.5f ), XMFLOAT4( 0.0f, 0.0f, 1.0f, 1.0f ) },
+       { XMFLOAT3( -1.0f, 5.0f, 2.5f ), XMFLOAT4( 0.0f, 0.0f, 1.0f, 1.0f ) },
         { XMFLOAT3( 1.0f, 5.0f, 2.5f ), XMFLOAT4( 0.0f, 1.0f, 0.0f, 1.0f ) },
         { XMFLOAT3( 1.0f, 5.0f, 2.5f ), XMFLOAT4( 0.0f, 1.0f, 1.0f, 1.0f ) },
         { XMFLOAT3( -1.0f, 5.0f, 2.5f ), XMFLOAT4( 1.0f, 0.0f, 0.0f, 1.0f ) },
         { XMFLOAT3( -1.0f, -5.0f, 2.5f ), XMFLOAT4( 1.0f, 0.0f, 1.0f, 1.0f ) },
         { XMFLOAT3( 1.0f, -5.0f, 2.5f ), XMFLOAT4( 1.0f, 1.0f, 0.0f, 1.0f ) },
         { XMFLOAT3( 1.0f, -5.0f, 2.5f ), XMFLOAT4( 1.0f, 1.0f, 1.0f, 1.0f ) },
-        { XMFLOAT3( -1.0f, -5.0f, 2.5f ), XMFLOAT4( 0.0f, 0.0f, 0.0f, 1.0f ) },*/
+        { XMFLOAT3( -1.0f, -5.0f, 2.5f ), XMFLOAT4( 0.0f, 0.0f, 0.0f, 1.0f ) },
 
 
-        { XMFLOAT3(-1.0f, 5.0f, 2.5f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
+       /* { XMFLOAT3(-1.0f, 5.0f, 2.5f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
         { XMFLOAT3(1.0f, 5.0f, 2.5f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
         { XMFLOAT3(1.0f, 5.0f, 2.5f), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
         { XMFLOAT3(-1.0f, 5.0f, 2.5f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
         { XMFLOAT3(-1.0f, -5.0f, 2.5f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
         { XMFLOAT3(1.0f, -5.0f, 2.5f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
         { XMFLOAT3(1.0f, -5.0f, 2.5f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
-        { XMFLOAT3(-1.0f, -5.0f, 2.5f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(-1.0f, -5.0f, 2.5f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) },*/
 
 
-               /* { XMFLOAT3(-1.0f, -3.0f, -1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
+       /* { XMFLOAT3(-1.0f, -3.0f, -1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
         { XMFLOAT3(1.0f, -3.0f, -1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
         { XMFLOAT3(1.0f, -3.0f, 1.0f), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
         { XMFLOAT3(-1.0f, -3.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
@@ -468,7 +468,7 @@ HRESULT InitDevice()
     };
     D3D11_BUFFER_DESC bd = {};
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof( SimpleVertex ) * 8;
+    bd.ByteWidth = sizeof( SimpleVertex ) * 16;
     bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 
@@ -537,7 +537,7 @@ HRESULT InitDevice()
 
 
     // Initialize the view matrix
-	XMVECTOR Eye = XMVectorSet( 2.0f, 1.0f, -5.0f, 0.0f );
+	XMVECTOR Eye = XMVectorSet( 8.0f, 1.0f, -5.0f, 0.0f );
 	XMVECTOR At = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
 	XMVECTOR Up = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
 	g_View = XMMatrixLookAtLH( Eye, At, Up );
@@ -628,25 +628,28 @@ void Render()
 	g_World1 = XMMatrixRotationY(0);
 
     // 3rd Cube: Rotate around the origin
-    g_World3 = XMMatrixRotationY(t);
+   g_World4 = XMMatrixRotationY(0);
 
     // 2nd Cube:  Rotate around origin
-    XMMATRIX mSpin = XMMatrixRotationZ(-t);
-    XMMATRIX mOrbit = XMMatrixRotationY( -t * 2.0f );
-	XMMATRIX mTranslate = XMMatrixTranslation(-4.0f, 1.0f, 8.0f );
-	XMMATRIX mScale = XMMatrixScaling(1.0f, 0.3f, 0.3f );
+    XMMATRIX mSpin = XMMatrixRotationZ(t);
+    XMMATRIX mOrbit = XMMatrixRotationY( t * 2.0f );
+	XMMATRIX mTranslate = XMMatrixTranslation(-2.0f, 1.0f, 2.0f );
+	XMMATRIX mScale = XMMatrixScaling(2.0f, 0.3f, 0.3f );
 
 	g_World2 = mScale * mSpin * mTranslate * mOrbit;
 
 
-    //// 4th Cube:  Rotate around origin
-    //XMMATRIX mSpin = XMMatrixRotationZ(-t);
-    //XMMATRIX mOrbit = XMMatrixRotationY(-t * 2.0f);
-    //XMMATRIX mTranslate = XMMatrixTranslation(-4.0f, 1.0f, 8.0f);
-    //XMMATRIX mScale = XMMatrixScaling(1.0f, 0.3f, 0.3f);
+    // 3rd Cube:  Rotate around origin
+    XMMATRIX mSpin2 = XMMatrixRotationZ(-t);
+    XMMATRIX mOrbit2 = XMMatrixRotationY(-t * 2.0f);
+    XMMATRIX mTranslate2 = XMMatrixTranslation(-2.0f, 1.0f, 2.0f);
+    XMMATRIX mScale2 = XMMatrixScaling(1.0f, 0.3f, 0.3f);
 
+    g_World3 = mScale2 * mSpin2 * mTranslate2 * mOrbit2;
+    
     //g_World4 = mScale * mSpin * mTranslate * mOrbit;
-    //
+
+    
     // Clear the back buffer
     //
     g_pImmediateContext->ClearRenderTargetView( g_pRenderTargetView, Colors::MidnightBlue );
@@ -659,6 +662,12 @@ void Render()
     //
     // Update variables for the first cube
     //
+
+
+
+
+
+
     ConstantBuffer cb1;
 	cb1.mWorld = XMMatrixTranspose( g_World1 );
 	cb1.mView = XMMatrixTranspose( g_View );
@@ -690,13 +699,30 @@ void Render()
     // Update variables for the third cube
    //
     ConstantBuffer cb3;
-    cb3.mWorld = XMMatrixTranspose(g_World4);
+    cb3.mWorld = XMMatrixTranspose(g_World3);
     cb3.mView = XMMatrixTranspose(g_View);
     cb3.mProjection = XMMatrixTranspose(g_Projection);
-    g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, &cb1, 0, 0);
+    g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, &cb3, 0, 0);
 
     //
     // Render the third cube
+    //
+    g_pImmediateContext->VSSetShader(g_pVertexShader, nullptr, 0);
+    g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
+    g_pImmediateContext->PSSetShader(g_pPixelShader, nullptr, 0);
+    g_pImmediateContext->DrawIndexed(36, 0, 0);
+
+
+    // Update variables for the fourth cube
+  //
+    ConstantBuffer cb4;
+    cb4.mWorld = XMMatrixTranspose(g_World4);
+    cb4.mView = XMMatrixTranspose(g_View);
+    cb4.mProjection = XMMatrixTranspose(g_Projection);
+    g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, &cb4, 0, 0);
+
+    //
+    // Render the fourth cube
     //
     g_pImmediateContext->VSSetShader(g_pVertexShader, nullptr, 0);
     g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
