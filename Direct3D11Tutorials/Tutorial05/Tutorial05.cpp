@@ -503,10 +503,10 @@ HRESULT InitDevice()
         return hr;
 
     // Initialize the world matrix
-	g_World1 = XMMatrixIdentity();
+	//g_World1 = XMMatrixIdentity();
 	g_World2 = XMMatrixIdentity();
     g_World3 = XMMatrixIdentity();
-    g_World4 = XMMatrixIdentity();
+    //g_World4 = XMMatrixIdentity();
     g_World5 = XMMatrixIdentity();
 
     // Initialize the view matrix
@@ -602,46 +602,46 @@ void Render()
     XMMATRIX mTranslate = XMMatrixTranslation(1.5f, 0.0f, 0.0f);
     XMMATRIX mScale = XMMatrixScaling(0.5f, 1.0f, 0.3f);
 
-    g_World1 = mScale * mTranslate;
+    //g_World1 = mScale * mTranslate;
 	//g_World1 = XMMatrixRotationY(0);
 
     //g_World4 = XMMatrixRotationY(t);
 
     // 2nd Cube:  Rotate around origin
-    XMMATRIX mSpin2 = XMMatrixRotationZ( -t );
-    XMMATRIX mOrbit2 = XMMatrixRotationY( -t * 3.0f );
+    XMMATRIX mSpin2 = XMMatrixRotationZ(0);
+    XMMATRIX mOrbit2 = XMMatrixRotationY(0 * 3.0f );
 	XMMATRIX mTranslate2 = XMMatrixTranslation( -2.5f, 2.5f, 1.0f );
-    XMMATRIX mScale2 = XMMatrixScaling( 0.3f, 0.1f, 0.3f );
+    XMMATRIX mScale2 = XMMatrixScaling( 2.3f, 0.5f, 2.3f );
 
 	g_World2 = mScale2 * mSpin2 * mTranslate2 * mOrbit2;
 
 
     // 3rd Cube:  Rotate around origin
     XMMATRIX mSpin3 = XMMatrixRotationZ(-t);
-    XMMATRIX mOrbit3 = XMMatrixRotationY(-t * 2.0f);
-    XMMATRIX mTranslate3 = XMMatrixTranslation(-4.5f, 2.0f, 3.5f);
-    XMMATRIX mScale3 = XMMatrixScaling(0.3f, 0.1f, 0.4f);
+    XMMATRIX mOrbit3 = XMMatrixRotationY(-t * 0.5f);
+    XMMATRIX mTranslate3 = XMMatrixTranslation(-6.5f, 2.0f, 3.5f);
+    XMMATRIX mScale3 = XMMatrixScaling(0.6f, 0.1f, 0.6f);
 
     g_World3 = mScale3 * mSpin3 * mTranslate3 * mOrbit3;
 
 
 
     //// 4th Cube:  Rotate around origin
-    XMMATRIX mSpin4 = XMMatrixRotationZ(0);
-    XMMATRIX mOrbit4 = XMMatrixRotationY( 0 * 2.0f);
-    XMMATRIX mTranslate4 = XMMatrixTranslation(-2.0f, -3.0f, -1.0f);
-    XMMATRIX mScale4 = XMMatrixScaling(-6.3f, 0.0f, 3.0f);
+    //XMMATRIX mSpin4 = XMMatrixRotationZ(0);
+    //XMMATRIX mOrbit4 = XMMatrixRotationY(0 * 2.0f);
+    //XMMATRIX mTranslate4 = XMMatrixTranslation(-5.0f, -3.0f, 3.0f);
+    //XMMATRIX mScale4 = XMMatrixScaling(3.3f, 0.0f, -5.0f);
 
-    g_World4 = mScale4 * mSpin4 * mTranslate4 * mOrbit4;
+    //g_World4 = mScale4 * mSpin4 * mTranslate4 * mOrbit4;
 
 
     //// 5th Cube:  Rotate around origin
-    //XMMATRIX mSpin5 = XMMatrixRotationZ(0);
-   // XMMATRIX mOrbit5 = XMMatrixRotationY(0 * 2.0f);
-    XMMATRIX mTranslate5 = XMMatrixTranslation(-5.0f, 0.0f, 0.0f);
-    XMMATRIX mScale5 = XMMatrixScaling(0.5f, 1.0f, 0.3f);
+    XMMATRIX mSpin5 = XMMatrixRotationZ(-t);
+    XMMATRIX mOrbit5 = XMMatrixRotationY(-t * 3.0f);
+    XMMATRIX mTranslate5 = XMMatrixTranslation(-7.0f, 2.0f, 2.0f);
+    XMMATRIX mScale5 = XMMatrixScaling(0.3f, 0.0f, 0.3f);
 
-    g_World5 = mScale5  * mTranslate5 ;
+    g_World5 = mScale5  * mSpin5 * mTranslate5 * mOrbit5;
 
     //
     // Clear the back buffer
