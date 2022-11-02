@@ -19,10 +19,6 @@
 #include <directxmath.h>
 #include <directxcolors.h>
 #include "resource.h"
-#include <assimp/Importer.hpp>       
-#include <assimp/scene.h>            
-#include <assimp/postprocess.h>   
-//Assimp::Importer::ReadFile()
 
 using namespace DirectX;
 
@@ -393,117 +389,33 @@ HRESULT InitDevice()
             L"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", L"Error", MB_OK);
         return hr;
     }
-    ID3D11RasterizerState* m_rasterState = 0;
 
-    D3D11_RASTERIZER_DESC rasterDesc;
-    rasterDesc.CullMode = D3D11_CULL_NONE;
-    rasterDesc.FillMode = D3D11_FILL_WIREFRAME;
-    rasterDesc.ScissorEnable = false;
-    rasterDesc.DepthBias = 0;
-    rasterDesc.DepthBiasClamp = 0.0f;
-    rasterDesc.DepthClipEnable = true;
-    rasterDesc.SlopeScaledDepthBias = 0.0f;
-
-    hr = g_pd3dDevice->CreateRasterizerState(&rasterDesc, &m_rasterState);
-
-    g_pImmediateContext->RSSetState(m_rasterState);
     // Create the pixel shader
     hr = g_pd3dDevice->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), nullptr, &g_pPixelShader);
     pPSBlob->Release();
     if (FAILED(hr))
         return hr;
 
-    /*const auto radius = 1.0f;
-    const auto pi = 3.14;*/
-
-    const int m = 7;
-   const  int n = 8;
-    float w = -1.0f;
-    float d = 1.0f;
-
-    float halfWidth = 0.5f * w;
-
-    float halfDepth = -1.5f * d;
-
-    float dx = w / (n - 1);
-
-    float dz = d / (m - 1);
-
-    constexpr  auto nVertices = m * n;
-
-    constexpr  auto nStrips = (m - 1) * (n - 1) * 2;
-
-    SimpleVertex gridVertices[100] = {};
-
-    for (int i = 0; i < m; ++i) {
-
-        float z = halfDepth - i * dz;
-
-        for (int j = 0; j < n; ++j) {
-
-            float x = -halfWidth + j * dx;
-
-            gridVertices[i * n + j].Pos = XMFLOAT3(x, 0.0f, z);
-
-
-            gridVertices[i * n + j].Color = XMFLOAT4(1.0f, 1.0f, 1.0f, 0.0f);
-
-        }
-
-    };
-
-
-
-    /* Create vertex buffer
-
-    const auto radius = 1.0f;
-    const auto pi = 3.14;
-
-   SimpleVertex vertices[] =
-
-
+    // Create vertex buffer
+    SimpleVertex vertices[] =
     {
-
-
-       
-
-        { XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
-        { XMFLOAT3(radius*XMScalarCos(XM_PI/3), 1.0f, radius*XMScalarSin(3.14/3)), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(XM_PI *2 / 3), 1.0f, radius * XMScalarSin(XM_PI*2 / 3)), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(XM_PI *3/ 3), 1.0f, radius * XMScalarSin(XM_PI *3 / 3)), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(XM_PI *4/ 3), 1.0f, radius * XMScalarSin(XM_PI *4 / 3)), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(XM_PI *5/ 3), 1.0f, radius * XMScalarSin(XM_PI *5 / 3)), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(XM_PI *6/ 3), 1.0f, radius * XMScalarSin(XM_PI *6 / 3)), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
-
-
-        { XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(XM_PI / 3), -1.0f, radius * XMScalarSin(3.14 / 3)), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(XM_PI * 2 / 3), -1.0f, radius * XMScalarSin(XM_PI * 2 / 3)), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(XM_PI * 3 / 3), -1.0f, radius * XMScalarSin(XM_PI * 3 / 3)), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(XM_PI * 4 / 3), -1.0f, radius * XMScalarSin(XM_PI * 4 / 3)), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(XM_PI * 5 / 3), -1.0f, radius * XMScalarSin(XM_PI * 5 / 3)), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(radius * XMScalarCos(XM_PI * 6 / 3), -1.0f, radius * XMScalarSin(XM_PI * 6 / 3)), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },*/
-
-
-   ////     
-   ////    
-   ////    /* {XMFLOAT3(0.0f, -2.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)},
-   ////     { XMFLOAT3(0.5f, -2.0f, -1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-   ////     { XMFLOAT3(1.0f, -2.0f, 0.0f), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
-   ////     { XMFLOAT3(0.5f, -2.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-   ////     { XMFLOAT3(-0.5f, -1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
-   ////     { XMFLOAT3(-1.0f, -2.0f, 0.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-   ////     { XMFLOAT3(-0.5f, -2.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
-   ////     { XMFLOAT3(1.0f, -2.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) },*/
-   //      };
+        { XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
+        { XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
+        { XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
+        { XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
+        { XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) },
+    };
     D3D11_BUFFER_DESC bd = {};
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(SimpleVertex) * nStrips * 3;
+    bd.ByteWidth = sizeof(SimpleVertex) * 8;
     bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     bd.CPUAccessFlags = 0;
 
     D3D11_SUBRESOURCE_DATA InitData = {};
-    InitData.pSysMem = gridVertices;
+    InitData.pSysMem = vertices;
     hr = g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pVertexBuffer);
     if (FAILED(hr))
         return hr;
@@ -514,99 +426,31 @@ HRESULT InitDevice()
     g_pImmediateContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer, &stride, &offset);
 
     // Create index buffer
-    //WORD indices[] =
-    //{
-    //   6,0,1,
-    //   1,0,2,
-    //   2,0,3,
-    //   3,0,4,
-    //   4,0,5,
-    //   5,0,6,
-    //    //6,0,1,
-    //    /*-2,0,3,
-    //     3,4,5,
-    //    -5,3,4,
+    WORD indices[] =
+    {
+        3,1,0,
+        2,1,3,
 
+        0,5,4,
+        1,5,0,
 
-    //     0,5,4,
-    //     1,5,0,
+        3,4,7,
+        0,4,3,
 
-    //     3,4,7,
-    //     0,4,3,
+        1,6,5,
+        2,6,1,
 
-    //     1,6,5,
-    //     2,6,1,
+        2,7,6,
+        3,7,2,
 
-    //     2,7,6,
-    //     // 3,1,2,
-    //      6,4,5,
-    //      6,4,5,
-    //      7,4,6,*/
-
-    //   7,13,8,
-    //   8,7,9,
-    //   9,7,10,
-    //   10,7,11,
-    //   11,7,12,
-    //   12,7,13,
-    //   13,7,8,
-
-
-    // 5,6,13,
-    //  5,12,13,
-    //  6,13,1,
-    //  1,13,8,
-    //  1,8,9,
-    //  1,9,2,
-    //  2,9,3,
-    //  3,10,4,
-    //  4,10,11,
-    //  4,11,12,
-    //  12,4,5,
-
-
-    //};
-   // const auto nStrips = 0;
-    WORD gridIndices[nStrips * 3] = {};
-
-    int k = 0;
-
-
-
-    for (int i = 0; i < m - 1; ++i) {
-
-        for (int j = 0; j < n - 1; ++j) {
-
-
-
-            gridIndices[k] = i * n + j;
-
-            gridIndices[k + 1] = i * n + (j + 1);
-
-            gridIndices[k + 2] = (i + 1) * n + j;
-
-            gridIndices[k + 3] = (i + 1) * n + j;
-
-            gridIndices[k + 4] = i * n + (j + 1);
-
-            gridIndices[k + 5] = (i + 1) * n + (j + 1);
-
-
-
-            k += 6;
-
-        }
-
+        6,4,5,
+        7,4,6,
     };
-
-
-
-
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(WORD) * nStrips * 3;        // 36 vertices needed for 12 triangles in a triangle list
+    bd.ByteWidth = sizeof(WORD) * 36;        // 36 vertices needed for 12 triangles in a triangle list
     bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
     bd.CPUAccessFlags = 0;
-    InitData.pSysMem = gridIndices;
+    InitData.pSysMem = indices;
     hr = g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pIndexBuffer);
     if (FAILED(hr))
         return hr;
@@ -630,9 +474,9 @@ HRESULT InitDevice()
     g_World = XMMatrixIdentity();
 
     // Initialize the view matrix
-    XMVECTOR Eye = XMVectorSet(0.0f, 4.0f,-5.0f, 0.0f);
-    XMVECTOR At = XMVectorSet(0.0f, 2.0f, 0.0f, 0.0f);
-    XMVECTOR Up = XMVectorSet(5.0f, 2.0f, 0.0f, 0.0f);
+    XMVECTOR Eye = XMVectorSet(0.0f, 1.0f, -5.0f, 0.0f);
+    XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+    XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
     g_View = XMMatrixLookAtLH(Eye, At, Up);
 
     // Initialize the projection matrix
@@ -718,7 +562,7 @@ void Render()
     //
     // Animate the cube
     //
-   // g_World = XMMatrixRotationY(t);
+    g_World = XMMatrixRotationY(t);
 
     //
     // Clear the back buffer
@@ -740,11 +584,10 @@ void Render()
     g_pImmediateContext->VSSetShader(g_pVertexShader, nullptr, 0);
     g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
     g_pImmediateContext->PSSetShader(g_pPixelShader, nullptr, 0);
-    g_pImmediateContext->DrawIndexed(420, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
+    g_pImmediateContext->DrawIndexed(36, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
 
     //
     // Present our back buffer to our front buffer
     //
     g_pSwapChain->Present(0, 0);
 }
-
