@@ -431,7 +431,7 @@ HRESULT InitDevice()
     // Create vertex buffer
     SimpleVertex vertices[] =
     {
-<<<<<<< HEAD
+
         { XMFLOAT3(-1.0f, 4.0f, -1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
         { XMFLOAT3(1.0f, 4.0f, -1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
         { XMFLOAT3(1.0f, 4.0f, 1.0f), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
@@ -440,7 +440,7 @@ HRESULT InitDevice()
         { XMFLOAT3(1.0f, -4.0f, -1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
         { XMFLOAT3(1.0f, -4.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
         { XMFLOAT3(-1.0f, -4.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) },
-=======
+
         { XMFLOAT3( -1.0f, 4.0f, -1.0f ), XMFLOAT4( 0.0f, 0.0f, 1.0f, 1.0f ) },
         { XMFLOAT3( 1.0f, 4.0f, -1.0f ), XMFLOAT4( 0.0f, 1.0f, 0.0f, 1.0f ) },
         { XMFLOAT3( 1.0f, 4.0f, 1.0f ), XMFLOAT4( 0.0f, 1.0f, 1.0f, 1.0f ) },
@@ -449,7 +449,7 @@ HRESULT InitDevice()
         { XMFLOAT3( 1.0f, -4.0f, -1.0f ), XMFLOAT4( 1.0f, 1.0f, 0.0f, 1.0f ) },
         { XMFLOAT3( 1.0f, -4.0f, 1.0f ), XMFLOAT4( 1.0f, 1.0f, 1.0f, 1.0f ) },
         { XMFLOAT3( -1.0f, -4.0f, 1.0f ), XMFLOAT4( 0.0f, 0.0f, 0.0f, 1.0f ) },
->>>>>>> 564388833b5dc6432149b78208c9cac793a9b4ff
+
     };
     D3D11_BUFFER_DESC bd = {};
     bd.Usage = D3D11_USAGE_DEFAULT;
@@ -514,29 +514,28 @@ HRESULT InitDevice()
         return hr;
 
     // Initialize the world matrix
-<<<<<<< HEAD
+
     //g_World1 = XMMatrixIdentity();
     g_World2 = XMMatrixIdentity();
-=======
+
 	//g_World1 = XMMatrixIdentity();
 	g_World2 = XMMatrixIdentity();
->>>>>>> 564388833b5dc6432149b78208c9cac793a9b4ff
+
     g_World3 = XMMatrixIdentity();
     //g_World4 = XMMatrixIdentity();
     g_World5 = XMMatrixIdentity();
 
-    // Initialize the view matrix
-<<<<<<< HEAD
-    XMVECTOR Eye = XMVectorSet(0.0f, 1.0f, -12.0f, 0.0f);
+    // Initialize the view matr
+   /* XMVECTOR Eye = XMVectorSet(0.0f, 1.0f, -12.0f, 0.0f);
     XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
     XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-    g_View = XMMatrixLookAtLH(Eye, At, Up);
-=======
+    g_View = XMMatrixLookAtLH(Eye, At, Up);*/
+
 	XMVECTOR Eye = XMVectorSet( 0.0f, 1.0f, -12.0f, 0.0f );
 	XMVECTOR At = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
 	XMVECTOR Up = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
 	g_View = XMMatrixLookAtLH( Eye, At, Up );
->>>>>>> 564388833b5dc6432149b78208c9cac793a9b4ff
+
 
     // Initialize the projection matrix
     g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV2, width / (FLOAT)height, 0.01f, 100.0f);
@@ -626,29 +625,29 @@ void Render()
     XMMATRIX mScale = XMMatrixScaling(0.5f, 1.0f, 0.3f);
 
     //g_World1 = mScale * mTranslate;
-<<<<<<< HEAD
+
     //g_World1 = XMMatrixRotationY(0);
-=======
+
 	//g_World1 = XMMatrixRotationY(0);
->>>>>>> 564388833b5dc6432149b78208c9cac793a9b4ff
+
 
     //g_World4 = XMMatrixRotationY(t);
 
     // 2nd Cube:  Rotate around origin
     XMMATRIX mSpin2 = XMMatrixRotationZ(0);
-<<<<<<< HEAD
-    XMMATRIX mOrbit2 = XMMatrixRotationY(0 * 3.0f);
+
+    /*XMMATRIX mOrbit2 = XMMatrixRotationY(0 * 3.0f);
     XMMATRIX mTranslate2 = XMMatrixTranslation(-2.5f, 2.5f, 1.0f);
     XMMATRIX mScale2 = XMMatrixScaling(2.3f, 0.5f, 2.3f);
 
-    g_World2 = mScale2 * mSpin2 * mTranslate2 * mOrbit2;
-=======
+    g_World2 = mScale2 * mSpin2 * mTranslate2 * mOrbit2;*/
+
     XMMATRIX mOrbit2 = XMMatrixRotationY(0 * 3.0f );
 	XMMATRIX mTranslate2 = XMMatrixTranslation( -2.5f, 2.5f, 1.0f );
     XMMATRIX mScale2 = XMMatrixScaling( 2.3f, 0.5f, 2.3f );
 
 	g_World2 = mScale2 * mSpin2 * mTranslate2 * mOrbit2;
->>>>>>> 564388833b5dc6432149b78208c9cac793a9b4ff
+
 
 
     // 3rd Cube:  Rotate around origin
@@ -676,11 +675,11 @@ void Render()
     XMMATRIX mTranslate5 = XMMatrixTranslation(-7.0f, 2.0f, 2.0f);
     XMMATRIX mScale5 = XMMatrixScaling(0.3f, 0.0f, 0.3f);
 
-<<<<<<< HEAD
+
     g_World5 = mScale5 * mSpin5 * mTranslate5 * mOrbit5;
-=======
-    g_World5 = mScale5  * mSpin5 * mTranslate5 * mOrbit5;
->>>>>>> 564388833b5dc6432149b78208c9cac793a9b4ff
+
+    //g_World5 = mScale5  * mSpin5 * mTranslate5 * mOrbit5;
+
 
     //
     // Clear the back buffer
@@ -765,7 +764,4 @@ void Render()
     //
     g_pSwapChain->Present(0, 0);
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> 564388833b5dc6432149b78208c9cac793a9b4ff
