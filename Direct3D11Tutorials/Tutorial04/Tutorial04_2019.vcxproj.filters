@@ -33,6 +33,5 @@
     <None Include="Tutorial04.fxh">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
 </Project>
