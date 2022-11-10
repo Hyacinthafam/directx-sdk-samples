@@ -67,6 +67,11 @@ ID3D11Buffer* g_pConstantBuffer = nullptr;
 XMMATRIX                g_World;
 XMMATRIX                g_View;
 XMMATRIX                g_Projection;
+XMMATRIX                g_World1;
+XMMATRIX                g_World2;
+XMMATRIX                g_World3;
+XMMATRIX                g_World4;
+XMMATRIX                g_World5;
 
 
 //--------------------------------------------------------------------------------------

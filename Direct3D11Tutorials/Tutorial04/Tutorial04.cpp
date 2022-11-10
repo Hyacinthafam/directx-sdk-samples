@@ -64,6 +64,12 @@ ID3D11Buffer* g_pConstantBuffer = nullptr;
 XMMATRIX                g_World;
 XMMATRIX                g_View;
 XMMATRIX                g_Projection;
+XMMATRIX                g_World1;
+XMMATRIX                g_World2;
+XMMATRIX                g_World3;
+XMMATRIX                g_World4;
+XMMATRIX                g_World5;
+
 
 
 //--------------------------------------------------------------------------------------
@@ -400,14 +406,16 @@ HRESULT InitDevice()
     // Create vertex buffer
     SimpleVertex vertices[] =
     {
-        { XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+
+
     };
     D3D11_BUFFER_DESC bd = {};
     bd.Usage = D3D11_USAGE_DEFAULT;
@@ -564,7 +572,86 @@ void Render()
     //
     // Animate the cube
     //
-    g_World = XMMatrixRotationY(t);
+    g_World = XMMatrixRotationY(-t);
+   /* XMMATRIX mOrbit = XMMatrixRotationY(t * 3.0f);
+    XMMATRIX mTranslate = XMMatrixTranslation(-2.5f, 2.5f, 1.0f);
+    XMMATRIX mScale = XMMatrixScaling(2.3f, 0.5f, 2.3f);
+    g_World = mScale * mTranslate * mOrbit; */
+
+    // Initialize the world matrix
+
+    //g_World1 = XMMatrixIdentity();
+    //g_World2 = XMMatrixIdentity();
+
+   
+
+    g_World3 = XMMatrixIdentity();
+    //g_World4 = XMMatrixIdentity();
+   // g_World5 = XMMatrixIdentity();
+
+
+
+
+    // 1st Cube: Rotate around the origin
+
+    //XMMATRIX mTranslate = XMMatrixTranslation(1.5f, 0.0f, 0.0f);
+   // XMMATRIX mScale = XMMatrixScaling(0.5f, 1.0f, 0.3f);
+
+    //g_World1 = mScale * mTranslate;
+
+    //g_World1 = XMMatrixRotationY(0);
+
+    //g_World1 = XMMatrixRotationY(0);
+
+
+    //g_World4 = XMMatrixRotationY(t);
+
+    // 2nd Cube:  Rotate around origin
+    //XMMATRIX mSpin2 = XMMatrixRotationZ(0);
+
+    /*XMMATRIX mOrbit2 = XMMatrixRotationY(0 * 3.0f);
+    XMMATRIX mTranslate2 = XMMatrixTranslation(-2.5f, 2.5f, 1.0f);
+    XMMATRIX mScale2 = XMMatrixScaling(2.3f, 0.5f, 2.3f);
+
+    g_World2 = mScale2 * mSpin2 * mTranslate2 * mOrbit2;*/
+
+    /*XMMATRIX mOrbit2 = XMMatrixRotationY(0 * 3.0f);
+    XMMATRIX mTranslate2 = XMMatrixTranslation(-2.5f, 2.5f, 1.0f);
+    XMMATRIX mScale2 = XMMatrixScaling(2.3f, 0.5f, 2.3f);
+
+    g_World2 = mScale2 * mSpin2 * mTranslate2 * mOrbit2;*/
+
+
+
+    // 3rd Cube:  Rotate around origin
+    XMMATRIX mSpin3 = XMMatrixRotationZ(t);
+    XMMATRIX mOrbit3 = XMMatrixRotationY(t * 0.5f);
+    XMMATRIX mTranslate3 = XMMatrixTranslation(-6.5f, 2.0f, 3.5f);
+    XMMATRIX mScale3 = XMMatrixScaling(0.6f, 0.1f, 0.6f);
+
+    g_World3 = mScale3 * mSpin3 * mTranslate3 * mOrbit3;
+
+
+
+    //// 4th Cube:  Rotate around origin
+    //XMMATRIX mSpin4 = XMMatrixRotationZ(0);
+    //XMMATRIX mOrbit4 = XMMatrixRotationY(0 * 2.0f);
+    //XMMATRIX mTranslate4 = XMMatrixTranslation(-5.0f, -3.0f, 3.0f);
+    //XMMATRIX mScale4 = XMMatrixScaling(3.3f, 0.0f, -5.0f);
+
+    //g_World4 = mScale4 * mSpin4 * mTranslate4 * mOrbit4;
+
+
+    //// 5th Cube:  Rotate around origin
+    /*XMMATRIX mSpin5 = XMMatrixRotationZ(-t);
+    XMMATRIX mOrbit5 = XMMatrixRotationY(-t * 3.0f);
+    XMMATRIX mTranslate5 = XMMatrixTranslation(-7.0f, 2.0f, 2.0f);
+    XMMATRIX mScale5 = XMMatrixScaling(0.3f, 0.0f, 0.3f);
+
+
+    g_World5 = mScale5 * mSpin5 * mTranslate5 * mOrbit5;*/
+
+
 
     //
     // Clear the back buffer
@@ -597,6 +684,76 @@ void Render()
 
     //
     // Present our back buffer to our front buffer
+    // Update variables for the first cube
+    //
+    ConstantBuffer cb1;
+    cb1.mWorld = XMMatrixTranspose(g_World1);
+    cb1.mView = XMMatrixTranspose(g_View);
+    cb1.mProjection = XMMatrixTranspose(g_Projection);
+    g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, &cb1, 0, 0);
+
+    //
+    // Render the first cube
+    //
+    g_pImmediateContext->VSSetShader(g_pVertexShader, nullptr, 0);
+    g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
+    g_pImmediateContext->PSSetShader(g_pPixelShader, nullptr, 0);
+    g_pImmediateContext->DrawIndexed(36, 0, 0);
+
+    //
+    // Update variables for the second cube
+    //
+    ConstantBuffer cb2;
+    cb2.mWorld = XMMatrixTranspose(g_World2);
+    cb2.mView = XMMatrixTranspose(g_View);
+    cb2.mProjection = XMMatrixTranspose(g_Projection);
+    g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, &cb2, 0, 0);
+
+    //
+    // Render the second cube
+    //
+    g_pImmediateContext->DrawIndexed(36, 0, 0);
+
+
+
+
+    ConstantBuffer cb3;
+    cb3.mWorld = XMMatrixTranspose(g_World3);
+    cb3.mView = XMMatrixTranspose(g_View);
+    cb3.mProjection = XMMatrixTranspose(g_Projection);
+    g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, &cb3, 0, 0);
+
+    //
+    // Render the second cube
+    //
+    g_pImmediateContext->DrawIndexed(36, 0, 0);
+
+
+    ConstantBuffer cb4;
+    cb4.mWorld = XMMatrixTranspose(g_World4);
+    cb4.mView = XMMatrixTranspose(g_View);
+    cb4.mProjection = XMMatrixTranspose(g_Projection);
+    g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, &cb4, 0, 0);
+
+    //
+    // Render the second cube
+    //
+    g_pImmediateContext->DrawIndexed(36, 0, 0);
+
+
+    ConstantBuffer cb5;
+    cb5.mWorld = XMMatrixTranspose(g_World5);
+    cb5.mView = XMMatrixTranspose(g_View);
+    cb5.mProjection = XMMatrixTranspose(g_Projection);
+    g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, &cb5, 0, 0);
+
+    //
+    // Render the second cube
+    //
+    g_pImmediateContext->DrawIndexed(36, 0, 0);
+
+
+
     //
     g_pSwapChain->Present(0, 0);
 }

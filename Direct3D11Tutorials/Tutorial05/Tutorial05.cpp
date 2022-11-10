@@ -636,11 +636,11 @@ void Render()
     // 2nd Cube:  Rotate around origin
     XMMATRIX mSpin2 = XMMatrixRotationZ(0);
 
-    /*XMMATRIX mOrbit2 = XMMatrixRotationY(0 * 3.0f);
+    XMMATRIX mOrbit2 = XMMatrixRotationY(0 * 3.0f);
     XMMATRIX mTranslate2 = XMMatrixTranslation(-2.5f, 2.5f, 1.0f);
     XMMATRIX mScale2 = XMMatrixScaling(2.3f, 0.5f, 2.3f);
 
-    g_World2 = mScale2 * mSpin2 * mTranslate2 * mOrbit2;*/
+    g_World2 = mScale2 * mSpin2 * mTranslate2 * mOrbit2;
 
     XMMATRIX mOrbit2 = XMMatrixRotationY(0 * 3.0f );
 	XMMATRIX mTranslate2 = XMMatrixTranslation( -2.5f, 2.5f, 1.0f );
@@ -678,7 +678,7 @@ void Render()
 
     g_World5 = mScale5 * mSpin5 * mTranslate5 * mOrbit5;
 
-    //g_World5 = mScale5  * mSpin5 * mTranslate5 * mOrbit5;
+    g_World5 = mScale5  * mSpin5 * mTranslate5 * mOrbit5;
 
 
     //
