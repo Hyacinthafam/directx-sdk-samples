@@ -84,9 +84,11 @@ VS_OUTPUT VS_main(float4 Pos : POSITION, float4 Color : COLOR)
 
     //inPos.xyz = (scale * (mul(inPos.xyz, rotationMatrix))) + translation;
     //
+    float4 inPos = Pos;
     output.Color = Color;
     return output;
 }
+
 
 
 //--------------------------------------------------------------------------------------
