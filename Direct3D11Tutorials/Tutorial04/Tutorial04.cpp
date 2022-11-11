@@ -406,14 +406,14 @@ HRESULT InitDevice()
     // Create vertex buffer
     SimpleVertex vertices[] =
     {
-        { XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
+        { XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
+        { XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
         { XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
+        { XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) },
 
 
     };
@@ -572,11 +572,11 @@ void Render()
     //
     // Animate the cube
     //
-    g_World = XMMatrixRotationY(-t);
-   /* XMMATRIX mOrbit = XMMatrixRotationY(t * 3.0f);
-    XMMATRIX mTranslate = XMMatrixTranslation(-2.5f, 2.5f, 1.0f);
-    XMMATRIX mScale = XMMatrixScaling(2.3f, 0.5f, 2.3f);
-    g_World = mScale * mTranslate * mOrbit; */
+    //g_World = XMMatrixRotationY(t);
+   XMMATRIX mSpin = XMMatrixRotationY(-t);
+    XMMATRIX mTranslate = XMMatrixTranslation(-2.0f, 0.3f, 1.0f);
+    XMMATRIX mScale = XMMatrixScaling(2.3f, 4.0f, 3.0f);
+    g_World = mScale * mSpin * mTranslate;
 
     // Initialize the world matrix
 
@@ -585,7 +585,7 @@ void Render()
 
    
 
-    g_World3 = XMMatrixIdentity();
+    //g_World3 = XMMatrixIdentity();
     //g_World4 = XMMatrixIdentity();
    // g_World5 = XMMatrixIdentity();
 
@@ -607,19 +607,19 @@ void Render()
     //g_World4 = XMMatrixRotationY(t);
 
     // 2nd Cube:  Rotate around origin
-    //XMMATRIX mSpin2 = XMMatrixRotationZ(0);
+    XMMATRIX mSpin1 = XMMatrixRotationZ(-t);
+
+    XMMATRIX mOrbit1 = XMMatrixRotationY(0 * 3.0f);
+    XMMATRIX mTranslate1 = XMMatrixTranslation(4.5f, 2.5f, 1.0f);
+    XMMATRIX mScale1 = XMMatrixScaling(2.3f, 0.5f, 2.3f);
+
+    g_World1 = mScale1 * mSpin1 * mTranslate1 * mOrbit1;
 
     /*XMMATRIX mOrbit2 = XMMatrixRotationY(0 * 3.0f);
     XMMATRIX mTranslate2 = XMMatrixTranslation(-2.5f, 2.5f, 1.0f);
     XMMATRIX mScale2 = XMMatrixScaling(2.3f, 0.5f, 2.3f);
 
-    g_World2 = mScale2 * mSpin2 * mTranslate2 * mOrbit2;*/
-
-    /*XMMATRIX mOrbit2 = XMMatrixRotationY(0 * 3.0f);
-    XMMATRIX mTranslate2 = XMMatrixTranslation(-2.5f, 2.5f, 1.0f);
-    XMMATRIX mScale2 = XMMatrixScaling(2.3f, 0.5f, 2.3f);
-
-    g_World2 = mScale2 * mSpin2 * mTranslate2 * mOrbit2;*/
+    g_World2 = mScale2 * mSpin2 * mTranslate2 * mOrbit2;
 
 
 
@@ -677,12 +677,19 @@ void Render()
     //
     // Renders a triangle
     //
+    g_pImmediateContext->VSSetShader(g_pVertexShader, nullptr, 0);
     g_pImmediateContext->VSSetShader(g_pVertexShader_1, nullptr, 0);
     g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
     g_pImmediateContext->PSSetShader(g_pPixelShader, nullptr, 0);
     g_pImmediateContext->DrawIndexed(36, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
 
     //
+    // 
+    g_pImmediateContext->VSSetShader(g_pVertexShader, nullptr, 0);
+    g_pImmediateContext->VSSetShader(g_pVertexShader_1, nullptr, 0);
+    g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
+    g_pImmediateContext->PSSetShader(g_pPixelShader, nullptr, 0);
+    g_pImmediateContext->DrawIndexed(36, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
     // Present our back buffer to our front buffer
     // Update variables for the first cube
     //

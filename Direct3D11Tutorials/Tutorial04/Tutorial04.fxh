@@ -67,24 +67,24 @@ VS_OUTPUT VS_main(float4 Pos : POSITION, float4 Color : COLOR)
         output.Color = float4(1.0f, 0.5f, 0.5f, 1.0f);
     }*/
 
-    float4 materialAmb = float4(0.1f, 0.2f, 0.3f, 1.0f);
-    float4 materialDif = float4(1.0f, 0.0f, 0.0f, 1.0f);
-    float4 lightCol = float4;
-    float4 lightDir = normalize(LightPos.xyz - Pos.xyz);
-    float diff = max(0.0f, dot(lightDir, normal));
-    
-    
-    float4 inPos = Pos;
-    float3 translation = float3(1.0f, 0.3f, 1.0f);
-    float3 scale = float3(0.2f, 3.0f, 3.0f);
+    //float4 materialAmb = float4(0.1f, 0.2f, 0.3f, 1.0f);
+    //float4 materialDif = float4(1.0f, 0.0f, 0.0f, 1.0f);
+    //float4 lightCol = float4;
+    //float4 lightDir = normalize(LightPos.xyz - Pos.xyz);
+    //float diff = max(0.0f, dot(lightDir, normal));
+    //
+    //
+    //float4 inPos = Pos;
+    //float3 translation = float3(1.0f, 0.3f, 1.0f);
+    //float3 scale = float3(0.2f, 3.0f, 3.0f);
 
-    float angle = 1.3748;
+    //float angle = 1.3748;
 
-    float3x3 rotationMatrix = { cos(angle), 0.0f, sin(angle), 0.0f, 1.0f, 0.0f, -sin(angle), 0.0f, cos(angle) };
+    //float3x3 rotationMatrix = { cos(angle), 0.0f, sin(angle), 0.0f, 1.0f, 0.0f, -sin(angle), 0.0f, cos(angle) };
 
-    inPos.xyz = (scale * (mul(inPos.xyz, rotationMatrix))) + translation;
-    
-    output.Color = (materialAmb + diff * materialDif) * lightCol;
+    //inPos.xyz = (scale * (mul(inPos.xyz, rotationMatrix))) + translation;
+    //
+    output.Color = Color;
     return output;
 }
 
