@@ -402,6 +402,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="seafloor.dds" />
+    <Image Include="wood.dds" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Tutorial07.fxh" />

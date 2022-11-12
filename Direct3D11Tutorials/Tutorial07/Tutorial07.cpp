@@ -30,6 +30,8 @@ struct SimpleVertex
 {
     XMFLOAT3 Pos;
     XMFLOAT2 Tex;
+    XMFLOAT3 Normal;
+    XMFLOAT2 TexCoord;
 };
 
 struct CBNeverChanges
@@ -57,6 +59,8 @@ HWND                                g_hWnd = nullptr;
 D3D_DRIVER_TYPE                     g_driverType = D3D_DRIVER_TYPE_NULL;
 D3D_FEATURE_LEVEL                   g_featureLevel = D3D_FEATURE_LEVEL_11_0;
 ID3D11Device*                       g_pd3dDevice = nullptr;
+ID3D11ShaderResourceView* wood_TextureRV = nullptr;
+ID3D11SamplerState* wood_Sampler = nullptr;
 ID3D11Device1*                      g_pd3dDevice1 = nullptr;
 ID3D11DeviceContext*                g_pImmediateContext = nullptr;
 ID3D11DeviceContext1*               g_pImmediateContext1 = nullptr;
@@ -214,7 +218,7 @@ HRESULT CompileShaderFromFile( const WCHAR* szFileName, LPCSTR szEntryPoint, LPC
 HRESULT InitDevice()
 {
     HRESULT hr = S_OK;
-
+    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Wood.dds", nullptr, &wood_TextureRV);
     RECT rc;
     GetClientRect( g_hWnd, &rc );
     UINT width = rc.right - rc.left;
@@ -327,6 +331,7 @@ HRESULT InitDevice()
         sd.Windowed = TRUE;
 
         hr = dxgiFactory->CreateSwapChain( g_pd3dDevice, &sd, &g_pSwapChain );
+        //hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Wood.dds", nullptr, &wood_TextureRV);
     }
 
     // Note this tutorial doesn't handle full-screen swapchains so we block the ALT+ENTER shortcut
@@ -397,6 +402,7 @@ HRESULT InitDevice()
     }
 
     // Create the vertex shader
+
     hr = g_pd3dDevice->CreateVertexShader( pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), nullptr, &g_pVertexShader );
     if( FAILED( hr ) )
     {    
@@ -408,7 +414,8 @@ HRESULT InitDevice()
     D3D11_INPUT_ELEMENT_DESC layout[] =
     {
         { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "NORMAL", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
     UINT numElements = ARRAYSIZE( layout );
 
@@ -441,7 +448,7 @@ HRESULT InitDevice()
     // Create vertex buffer
     SimpleVertex vertices[] =
     {
-        { XMFLOAT3( -1.0f, 1.0f, -1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
+        { XMFLOAT3( -1.0f, 1.0f, -1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
         { XMFLOAT3( 1.0f, 1.0f, -1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
         { XMFLOAT3( 1.0f, 1.0f, 1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
         { XMFLOAT3( -1.0f, 1.0f, 1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
@@ -553,6 +560,7 @@ HRESULT InitDevice()
 
     // Create the sample state
     D3D11_SAMPLER_DESC sampDesc = {};
+    ZeroMemory(&sampDesc, sizeof(sampDesc));
     sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
     sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
     sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -561,8 +569,18 @@ HRESULT InitDevice()
     sampDesc.MinLOD = 0;
     sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
     hr = g_pd3dDevice->CreateSamplerState( &sampDesc, &g_pSamplerLinear );
+    hr = g_pd3dDevice->CreateSamplerState(&sampDesc, &wood_Sampler);
     if( FAILED( hr ) )
         return hr;
+
+    //D3D11_SAMPLER_DESC sampDesc ;
+    //ZeroMemory(&sampDesc, sizeof(sampDesc));
+    //sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+    //sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+    //sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+    //sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+    //sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+    //hr = g_pd3dDevice->CreateSamplerState(&sampDesc, &wood_Sampler);
 
     // Initialize the world matrices
     g_World = XMMatrixIdentity();
@@ -679,6 +697,10 @@ void Render()
     // Clear the back buffer
     //
     g_pImmediateContext->ClearRenderTargetView( g_pRenderTargetView, Colors::MidnightBlue );
+
+    g_pImmediateContext->PSSetShaderResources(0, 1, &wood_TextureRV);
+
+    g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
 
     //
     // Clear the depth buffer to 1.0 (max depth)

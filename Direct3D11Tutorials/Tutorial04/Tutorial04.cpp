@@ -19,6 +19,8 @@
 #include <directxmath.h>
 #include <directxcolors.h>
 #include "resource.h"
+#include "DDSTextureLoader.h"
+#include "DDSTextureLoader.cpp"
 
 using namespace DirectX;
 
@@ -28,7 +30,9 @@ using namespace DirectX;
 struct SimpleVertex
 {
     XMFLOAT3 Pos;
-    XMFLOAT4 Color;
+    //XMFLOAT4 Color;
+    XMFLOAT3 Normal;
+    XMFLOAT2 TexCoord;
 };
 
 
@@ -37,6 +41,10 @@ struct ConstantBuffer
     XMMATRIX mWorld;
     XMMATRIX mView;
     XMMATRIX mProjection;
+    XMVECTOR lightPos;
+    XMVECTOR mEye;
+    XMVECTOR mLookAtPoint;
+    XMVECTOR mUp;
 };
 
 
@@ -45,10 +53,14 @@ struct ConstantBuffer
 //--------------------------------------------------------------------------------------
 HINSTANCE               g_hInst = nullptr;
 HWND                    g_hWnd = nullptr;
+ID3D11Texture2D* g_pDepthStencil = nullptr;
+ID3D11DepthStencilView* g_pDepthStencilView = nullptr;
 D3D_DRIVER_TYPE         g_driverType = D3D_DRIVER_TYPE_NULL;
 D3D_FEATURE_LEVEL       g_featureLevel = D3D_FEATURE_LEVEL_11_0;
 ID3D11Device* g_pd3dDevice = nullptr;
 ID3D11Device1* g_pd3dDevice1 = nullptr;
+ID3D11ShaderResourceView* wood_TextureRV = nullptr;
+ID3D11SamplerState* wood_Sampler = nullptr;
 ID3D11DeviceContext* g_pImmediateContext = nullptr;
 ID3D11DeviceContext1* g_pImmediateContext1 = nullptr;
 IDXGISwapChain* g_pSwapChain = nullptr;
@@ -205,7 +217,7 @@ HRESULT CompileShaderFromFile(const WCHAR* szFileName, LPCSTR szEntryPoint, LPCS
 HRESULT InitDevice()
 {
     HRESULT hr = S_OK;
-
+    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Wood.dds", nullptr, &wood_TextureRV);
     RECT rc;
     GetClientRect(g_hWnd, &rc);
     UINT width = rc.right - rc.left;
@@ -339,7 +351,8 @@ HRESULT InitDevice()
     if (FAILED(hr))
         return hr;
 
-    g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, nullptr);
+    //g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, nullptr);
+    g_pImmediateContext->PSSetShaderResources(0, 1, &wood_TextureRV);
 
     // Setup the viewport
     D3D11_VIEWPORT vp;
@@ -373,7 +386,9 @@ HRESULT InitDevice()
     D3D11_INPUT_ELEMENT_DESC layout[] =
     {
         { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        //{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "NORMAL", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+         { "TEXCOORD", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
     UINT numElements = ARRAYSIZE(layout);
 
@@ -386,6 +401,7 @@ HRESULT InitDevice()
 
     // Set the input layout
     g_pImmediateContext->IASetInputLayout(g_pVertexLayout);
+    //g_pImmediateContext->PSSetShaderResources(0, 1, &wood_TextureRV);
 
     // Compile the pixel shader
     ID3DBlob* pPSBlob = nullptr;
@@ -406,14 +422,14 @@ HRESULT InitDevice()
     // Create vertex buffer
     SimpleVertex vertices[] =
     {
-        { XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
-        { XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
-        { XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
-        { XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-        { XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
-        { XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) },
+        { XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f),XMFLOAT2(0.0f, 1.0f) },
+        { XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f),XMFLOAT2(0.0f, 1.0f) },
+        { XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
+        { XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f),XMFLOAT2(0.0f, 1.0f) },
+        { XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(1.0f, 0.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
+        { XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f) },
+        { XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
+        { XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 1.0f) },
 
 
     };
@@ -429,10 +445,35 @@ HRESULT InitDevice()
     if (FAILED(hr))
         return hr;
 
+    D3D11_SAMPLER_DESC sampDesc ;
+    ZeroMemory(&sampDesc, sizeof(sampDesc));
+    sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+    sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+    sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+    sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+    sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+    sampDesc.MinLOD = 0;
+    sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+    hr = g_pd3dDevice->CreateSamplerState(&sampDesc, &wood_Sampler);
+
     // Set vertex buffer
     UINT stride = sizeof(SimpleVertex);
     UINT offset = 0;
     g_pImmediateContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer, &stride, &offset);
+
+
+    D3D11_TEXTURE2D_DESC descDepth;
+    ZeroMemory(&descDepth, sizeof(descDepth));
+    descDepth.Width = width;
+    descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+    //hr = g_pd3dDevice->CreateTexture2D(&descDepth, nullptr,&g_pDepthStencil);
+
+    D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+    ZeroMemory(&descDSV, sizeof(descDSV));
+    descDSV.Format = descDepth.Format;
+    descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+    descDSV.Texture2D.MipSlice = 0;
+    //hr = g_pd3dDevice->CreateDepthStencilView(g_pDepthStencil, &descDSV,&g_pDepthStencilView);
 
     // Create index buffer
     WORD indices[] =
@@ -466,6 +507,10 @@ HRESULT InitDevice()
 
     // Set index buffer
     g_pImmediateContext->IASetIndexBuffer(g_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+
+    g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
+
+    
 
     // Set primitive topology
     g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -574,8 +619,8 @@ void Render()
     //
     //g_World = XMMatrixRotationY(t);
    XMMATRIX mSpin = XMMatrixRotationY(-t);
-    XMMATRIX mTranslate = XMMatrixTranslation(-2.0f, 0.3f, 1.0f);
-    XMMATRIX mScale = XMMatrixScaling(2.3f, 4.0f, 3.0f);
+    XMMATRIX mTranslate = XMMatrixTranslation(1.0f, 0.3f, 1.0f);
+    XMMATRIX mScale = XMMatrixScaling(0.2f, 3.0f, 3.0f);
     g_World = mScale * mSpin * mTranslate;
 
     // Initialize the world matrix
@@ -657,7 +702,7 @@ void Render()
     // Clear the back buffer
     //
     g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, Colors::MidnightBlue);
-
+    //g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
     //
     // Update variables
     //
@@ -682,7 +727,10 @@ void Render()
     g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
     g_pImmediateContext->PSSetShader(g_pPixelShader, nullptr, 0);
     g_pImmediateContext->DrawIndexed(36, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
-
+    g_pImmediateContext->PSSetShaderResources(0, 1, &wood_TextureRV);
+    //g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
+    //if (g_pVertexShader_1) g_pVertexShader_1->Release();
+    
     //
     // 
     g_pImmediateContext->VSSetShader(g_pVertexShader, nullptr, 0);

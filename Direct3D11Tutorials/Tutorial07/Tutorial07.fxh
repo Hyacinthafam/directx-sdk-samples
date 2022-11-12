@@ -32,13 +32,16 @@ cbuffer cbChangesEveryFrame : register( b2 )
 struct VS_INPUT
 {
     float4 Pos : POSITION;
-    float2 Tex : TEXCOORD0;
+    float3 Norm : NORMAL;
+    float2 Tex : TEXCOORD;
 };
 
 struct PS_INPUT
 {
     float4 Pos : SV_POSITION;
     float2 Tex : TEXCOORD0;
+    
+    float3 Norm : TEXCOORD1;
 };
 
 
@@ -52,6 +55,7 @@ PS_INPUT VS( VS_INPUT input )
     output.Pos = mul( output.Pos, View );
     output.Pos = mul( output.Pos, Projection );
     output.Tex = input.Tex;
+   
     
     return output;
 }
@@ -61,6 +65,13 @@ PS_INPUT VS( VS_INPUT input )
 // Pixel Shader
 //--------------------------------------------------------------------------------------
 float4 PS( PS_INPUT input) : SV_Target
+//Texture3D txWoodColor : register(t0);
+//SamplerState txWoodsamSampler : register(s0);
+     //Texture2D txWoodColor : register(t0);
+     //SamplerState txWoodsamSampler : register(s0);
+
 {
-    return txDiffuse.Sample( samLinear, input.Tex ) * vMeshColor;
+    //float4 woodColor = txWoodColor.Sample(txSoosamSampler, input.Tex);
+   //return txDiffuse.Sample( samLinear, input.Tex ) * vMeshColor;
+      return woodColor; //oreturn woodColor * lightColor;
 }
