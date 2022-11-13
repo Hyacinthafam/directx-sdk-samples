@@ -40,6 +40,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="wood.dds" />
+    <Image Include="Coin.dds" />
+    <Image Include="rocks.DDS" />
+    <Image Include="Tiles.dds" />
+    <Image Include="Wood.dds" />
   </ItemGroup>
 </Project>
