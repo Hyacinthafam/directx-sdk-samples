@@ -406,6 +406,7 @@
     <Image Include="..\..\Direct3D11Tutorials -lab5\Tutorial07\Tiles.dds" />
     <Image Include="..\..\Direct3D11Tutorials -lab5\Tutorial07\Wood.dds" />
     <Image Include="seafloor.dds" />
+    <Image Include="Texture.dds" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Tutorial07.fxh" />
