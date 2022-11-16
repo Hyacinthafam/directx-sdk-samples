@@ -8,8 +8,9 @@
 //--------------------------------------------------------------------------------------
 // Constant Buffer Variables
 //--------------------------------------------------------------------------------------
-Texture2D txDiffuse : register( t0 );
-SamplerState samLinear : register( s0 );
+Texture2D txWoodColor : register(t0);
+SamplerState txWoodsamSampler : register(s0);
+
 
 cbuffer cbNeverChanges : register( b0 )
 {
@@ -71,7 +72,9 @@ float4 PS( PS_INPUT input) : SV_Target
      //SamplerState txWoodsamSampler : register(s0);
 
 {
-    //float4 woodColor = txWoodColor.Sample(txSoosamSampler, input.Tex);
+    float4 woodColor = txWoodColor.Sample(txWoodsamSampler, input.Tex);
    //return txDiffuse.Sample( samLinear, input.Tex ) * vMeshColor;
-      return woodColor; //oreturn woodColor * lightColor;
+     return woodColor; 
+     
+     //return woodColor * lightColor;
 }

@@ -401,8 +401,11 @@
     <ResourceCompile Include="Tutorial07.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\Direct3D11Tutorials -lab5\Tutorial07\Coin.dds" />
+    <Image Include="..\..\Direct3D11Tutorials -lab5\Tutorial07\rocks.DDS" />
+    <Image Include="..\..\Direct3D11Tutorials -lab5\Tutorial07\Tiles.dds" />
+    <Image Include="..\..\Direct3D11Tutorials -lab5\Tutorial07\Wood.dds" />
     <Image Include="seafloor.dds" />
-    <Image Include="wood.dds" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Tutorial07.fxh" />

@@ -37,7 +37,18 @@
     <Image Include="seafloor.dds">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="wood.dds" />
+    <Image Include="..\..\Direct3D11Tutorials -lab5\Tutorial07\Coin.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\Direct3D11Tutorials -lab5\Tutorial07\rocks.DDS">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\Direct3D11Tutorials -lab5\Tutorial07\Tiles.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\Direct3D11Tutorials -lab5\Tutorial07\Wood.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Tutorial07.fxh">

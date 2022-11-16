@@ -59,8 +59,8 @@ HWND                                g_hWnd = nullptr;
 D3D_DRIVER_TYPE                     g_driverType = D3D_DRIVER_TYPE_NULL;
 D3D_FEATURE_LEVEL                   g_featureLevel = D3D_FEATURE_LEVEL_11_0;
 ID3D11Device*                       g_pd3dDevice = nullptr;
-ID3D11ShaderResourceView* wood_TextureRV = nullptr;
-ID3D11SamplerState* wood_Sampler = nullptr;
+ID3D11ShaderResourceView*           wood_TextureRV = nullptr;
+ID3D11SamplerState*                 wood_Sampler = nullptr;
 ID3D11Device1*                      g_pd3dDevice1 = nullptr;
 ID3D11DeviceContext*                g_pImmediateContext = nullptr;
 ID3D11DeviceContext1*               g_pImmediateContext1 = nullptr;
@@ -218,7 +218,7 @@ HRESULT CompileShaderFromFile( const WCHAR* szFileName, LPCSTR szEntryPoint, LPC
 HRESULT InitDevice()
 {
     HRESULT hr = S_OK;
-    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Wood.dds", nullptr, &wood_TextureRV);
+   //hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Wood.dds", nullptr, &wood_TextureRV);
     RECT rc;
     GetClientRect( g_hWnd, &rc );
     UINT width = rc.right - rc.left;
@@ -554,7 +554,8 @@ HRESULT InitDevice()
         return hr;
 
     // Load the Texture
-    hr = CreateDDSTextureFromFile( g_pd3dDevice, L"seafloor.dds", nullptr, &g_pTextureRV );
+    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Wood.dds", nullptr, &wood_TextureRV);
+    //hr = CreateDDSTextureFromFile( g_pd3dDevice, L"seafloor.dds", nullptr, &g_pTextureRV );
     if( FAILED( hr ) )
         return hr;
 
@@ -568,7 +569,7 @@ HRESULT InitDevice()
     sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
     sampDesc.MinLOD = 0;
     sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-    hr = g_pd3dDevice->CreateSamplerState( &sampDesc, &g_pSamplerLinear );
+   // hr = g_pd3dDevice->CreateSamplerState( &sampDesc, &g_pSamplerLinear );
     hr = g_pd3dDevice->CreateSamplerState(&sampDesc, &wood_Sampler);
     if( FAILED( hr ) )
         return hr;
@@ -724,7 +725,8 @@ void Render()
     g_pImmediateContext->VSSetConstantBuffers( 2, 1, &g_pCBChangesEveryFrame );
     g_pImmediateContext->PSSetShader( g_pPixelShader, nullptr, 0 );
     g_pImmediateContext->PSSetConstantBuffers( 2, 1, &g_pCBChangesEveryFrame );
-    g_pImmediateContext->PSSetShaderResources( 0, 1, &g_pTextureRV );
+    //g_pImmediateContext->PSSetShaderResources( 0, 1, &g_pTextureRV );
+    g_pImmediateContext->PSSetShaderResources(0, 1, &wood_TextureRV);
     g_pImmediateContext->PSSetSamplers( 0, 1, &g_pSamplerLinear );
     g_pImmediateContext->DrawIndexed( 36, 0, 0 );
 
