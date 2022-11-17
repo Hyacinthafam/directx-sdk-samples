@@ -60,8 +60,6 @@ HWND                                g_hWnd = nullptr;
 D3D_DRIVER_TYPE                     g_driverType = D3D_DRIVER_TYPE_NULL;
 D3D_FEATURE_LEVEL                   g_featureLevel = D3D_FEATURE_LEVEL_11_0;
 ID3D11Device* g_pd3dDevice = nullptr;
-ID3D11ShaderResourceView* wood_TextureRV = nullptr;
-ID3D11SamplerState* wood_Sampler = nullptr;
 ID3D11Device1* g_pd3dDevice1 = nullptr;
 ID3D11DeviceContext* g_pImmediateContext = nullptr;
 ID3D11DeviceContext1* g_pImmediateContext1 = nullptr;
@@ -84,6 +82,9 @@ XMMATRIX                            g_World;
 XMMATRIX                            g_View;
 XMMATRIX                            g_Projection;
 XMFLOAT4                            g_vMeshColor(0.7f, 0.7f, 0.7f, 1.0f);
+
+ID3D11ShaderResourceView* wood_TextureRV = nullptr;
+ID3D11SamplerState* wood_Sampler = nullptr;
 
 
 //--------------------------------------------------------------------------------------
@@ -219,7 +220,7 @@ HRESULT CompileShaderFromFile(const WCHAR* szFileName, LPCSTR szEntryPoint, LPCS
 HRESULT InitDevice()
 {
     HRESULT hr = S_OK;
-    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Wood.dds", nullptr, &wood_TextureRV);
+   // hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Wood.dds", nullptr, &wood_TextureRV);
 
     RECT rc;
     GetClientRect(g_hWnd, &rc);
@@ -556,22 +557,21 @@ HRESULT InitDevice()
         return hr;
 
     // Load the Texture
-     hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Wood.dds", nullptr, &wood_TextureRV);
+    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Wood.dds", nullptr, &wood_TextureRV);
     if (FAILED(hr))
         return hr;
 
     // Create the sample state
-    D3D11_SAMPLER_DESC sampDesc = {};
+    D3D11_SAMPLER_DESC sampDesc ;
     ZeroMemory(&sampDesc, sizeof(sampDesc));
     sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
     sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
     sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
     sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
     sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-    sampDesc.MinLOD = 0;
-    sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
    
     hr = g_pd3dDevice->CreateSamplerState(&sampDesc, &wood_Sampler);
+    
     
     if (FAILED(hr))
         return hr;
@@ -702,8 +702,8 @@ void Render()
     g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, Colors::MidnightBlue);
 
     
-   // g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
-   // g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
+
+    g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
 
     //
     // Clear the depth buffer to 1.0 (max depth)
@@ -730,7 +730,6 @@ void Render()
     //g_pImmediateContext->PSSetShaderResources(0, 1, &g_pTextureRV);
     g_pImmediateContext->PSSetShaderResources(0, 1, &wood_TextureRV);
     g_pImmediateContext->PSSetSamplers(0, 1, &wood_Sampler);
-    g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
     g_pImmediateContext->DrawIndexed(36, 0, 0);
 
     //
