@@ -401,7 +401,12 @@
     <ResourceCompile Include="Tutorial07.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Coin.dds" />
+    <Image Include="rocks.DDS" />
     <Image Include="seafloor.dds" />
+    <Image Include="Texture.dds" />
+    <Image Include="Tiles.dds" />
+    <Image Include="Wood.dds" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Tutorial07.fxh" />

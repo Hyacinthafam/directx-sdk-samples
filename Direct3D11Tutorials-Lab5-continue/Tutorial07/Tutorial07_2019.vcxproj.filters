@@ -37,6 +37,19 @@
     <Image Include="seafloor.dds">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Wood.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Texture.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Tiles.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Coin.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="rocks.DDS" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Tutorial07.fxh">
