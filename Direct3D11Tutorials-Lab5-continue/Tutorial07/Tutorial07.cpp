@@ -78,6 +78,7 @@ ID3D11Buffer* g_pCBNeverChanges = nullptr;
 ID3D11Buffer* g_pCBChangeOnResize = nullptr;
 ID3D11Buffer* g_pCBChangesEveryFrame = nullptr;
 ID3D11ShaderResourceView* g_pTextureRV = nullptr;
+ID3D11ShaderResourceView* g_pTextureRV1 = nullptr;
 ID3D11SamplerState* g_pSamplerLinear = nullptr;
 XMMATRIX                            g_World;
 XMMATRIX                            g_View;
@@ -565,10 +566,15 @@ HRESULT InitDevice()
     if (FAILED(hr))
         return hr;
 
+    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"rocks.dds", nullptr, &wood_TextureRV);
+    if (FAILED(hr))
+        return hr;
+
     // Create the sample state
     D3D11_SAMPLER_DESC sampDesc = {};
-    ZeroMemory(&sampDesc, sizeof(sampDesc));
-    sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+    //ZeroMemory(&sampDesc, sizeof(sampDesc));
+    sampDesc.Filter = D3D11_FILTER_MAXIMUM_ANISOTROPIC;
+    //sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
     sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
     sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
     sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -580,6 +586,10 @@ HRESULT InitDevice()
     if (FAILED(hr))
         return hr;
 
+    /*HRESULT CreateSamplerState(
+        [in] const D3D11_SAMPLER_DESC* pSamplerDesc,
+        [out, optional] ID3D11SamplerState** ppSamplerState
+    );*/
     //D3D11_SAMPLER_DESC sampDesc ;
     //ZeroMemory(&sampDesc, sizeof(sampDesc));
     //sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
