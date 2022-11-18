@@ -70,7 +70,7 @@ PS_INPUT VS( VS_INPUT input )
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
-float4 PS( PS_INPUT input) : SV_Target
+float4 PS( PS_INPUT input, bool isFrontFace : SV_IsFrontFace) : SV_Target
 {
     float4 tileColor = txtileColor.Sample(txWoodsamSampler, input.Tex);
     float4 woodColor = txWoodColor.Sample(txWoodsamSampler, input.Tex);
