@@ -60,6 +60,7 @@ D3D_DRIVER_TYPE                     g_driverType = D3D_DRIVER_TYPE_NULL;
 D3D_FEATURE_LEVEL                   g_featureLevel = D3D_FEATURE_LEVEL_11_0;
 ID3D11Device* g_pd3dDevice = nullptr;
 ID3D11ShaderResourceView* wood_TextureRV = nullptr;
+ID3D11ShaderResourceView* wood_TextureRV1 = nullptr;
 ID3D11SamplerState* wood_Sampler = nullptr;
 ID3D11Device1* g_pd3dDevice1 = nullptr;
 ID3D11DeviceContext* g_pImmediateContext = nullptr;
@@ -562,11 +563,11 @@ HRESULT InitDevice()
 
     // Load the Texture
     //hr = CreateDDSTextureFromFile(g_pd3dDevice, L"rocks.dds", nullptr, &wood_TextureRV);
-    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Wood.dds", nullptr, &wood_TextureRV);
+    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"rocks.dds", nullptr, &wood_TextureRV);
     if (FAILED(hr))
         return hr;
 
-    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"rocks.dds", nullptr, &wood_TextureRV);
+    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Wood.dds", nullptr, &wood_TextureRV1);
     if (FAILED(hr))
         return hr;
 
@@ -742,6 +743,7 @@ void Render()
     g_pImmediateContext->PSSetShader(g_pPixelShader, nullptr, 0);
     g_pImmediateContext->PSSetConstantBuffers(2, 1, &g_pCBChangesEveryFrame);
     g_pImmediateContext->PSSetShaderResources(0, 1, &wood_TextureRV);
+    g_pImmediateContext->PSSetShaderResources(0, 1, &wood_TextureRV1);
     g_pImmediateContext->PSSetSamplers(0, 1, &wood_Sampler);
     g_pImmediateContext->DrawIndexed(36, 0, 0);
 
