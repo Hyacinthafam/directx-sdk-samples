@@ -452,39 +452,39 @@ HRESULT InitDevice()
     {
         //Top
         { XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f) },
-        { XMFLOAT3(1.0f, 1.0f, -1.0f),  XMFLOAT3(0.0f, 1.0f, 0.0f),  XMFLOAT2(0.0f, 0.0f) },
-        { XMFLOAT3(1.0f, 1.0f, 1.0f),  XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f) },
-        { XMFLOAT3(-1.0f, 1.0f, 1.0f),  XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f) },
+        { XMFLOAT3(1.0f, 1.0f, -1.0f),  XMFLOAT3(0.0f, 1.0f, 0.0f),  XMFLOAT2(1.0f, 1.0f) },
+        { XMFLOAT3(1.0f, 1.0f, 1.0f),  XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f) },
+        { XMFLOAT3(-1.0f, 1.0f, 1.0f),  XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f) },
 
         //Bottom
         { XMFLOAT3(-1.0f, -1.0f, -1.0f),   XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f) },
-        { XMFLOAT3(1.0f, -1.0f, -1.0f),   XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f) },
-        { XMFLOAT3(1.0f, -1.0f, 1.0f),   XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f) },
-        { XMFLOAT3(-1.0f, -1.0f, 1.0f),   XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f) },
+        { XMFLOAT3(1.0f, -1.0f, -1.0f),   XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT2(6.0f, 6.0f) },
+        { XMFLOAT3(1.0f, -1.0f, 1.0f),   XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT2(6.0f, 0.0f) },
+        { XMFLOAT3(-1.0f, -1.0f, 1.0f),   XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f) },
 
         //Left
-        { XMFLOAT3(-1.0f, -1.0f, 1.0f),  XMFLOAT3(-1.0f, 0.0f, 0.0f),  XMFLOAT2(0.0f, 1.0f) },
-        { XMFLOAT3(-1.0f, -1.0f, -1.0f),  XMFLOAT3(-1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f) },
-        { XMFLOAT3(-1.0f, 1.0f, -1.0f),  XMFLOAT3(-1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 0.0f) },
-        { XMFLOAT3(-1.0f, 1.0f, 1.0f),  XMFLOAT3(1 - .0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 0.0f) },
+        { XMFLOAT3(-1.0f, -1.0f, 1.0f),  XMFLOAT3(-1.0f, 0.0f, 0.0f),  XMFLOAT2(0.0f, 4.0f) },
+        { XMFLOAT3(-1.0f, -1.0f, -1.0f),  XMFLOAT3(-1.0f, 0.0f, 0.0f), XMFLOAT2(4.0f, 4.0f) },
+        { XMFLOAT3(-1.0f, 1.0f, -1.0f),  XMFLOAT3(-1.0f, 0.0f, 0.0f), XMFLOAT2(4.0f, 0.0f) },
+        { XMFLOAT3(-1.0f, 1.0f, 1.0f),  XMFLOAT3(-1.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 0.0f) },
 
         //Right
-        { XMFLOAT3(1.0f, -1.0f, 1.0f),  XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f) },
-        { XMFLOAT3(1.0f, -1.0f, -1.0f),  XMFLOAT3(1.0f, 0.0f, 0.0f),  XMFLOAT2(0.0f, 1.0f) },
-        { XMFLOAT3(1.0f, 1.0f, -1.0f),  XMFLOAT3(1.0f, 0.0f, 0.0f),  XMFLOAT2(0.0f, 0.0f) },
-        { XMFLOAT3(1.0f, 1.0f, 1.0f),  XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 0.0f) },
+        { XMFLOAT3(1.0f, -1.0f, 1.0f),  XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 3.0f) },
+        { XMFLOAT3(1.0f, -1.0f, -1.0f),  XMFLOAT3(1.0f, 0.0f, 0.0f),  XMFLOAT2(3.0f, 3.0f) },
+        { XMFLOAT3(1.0f, 1.0f, -1.0f),  XMFLOAT3(1.0f, 0.0f, 0.0f),  XMFLOAT2(3.0f, 0.0f) },
+        { XMFLOAT3(1.0f, 1.0f, 1.0f),  XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 0.0f) },
 
         //Front
-        { XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(0.0f, 1.0f) },
-        { XMFLOAT3(1.0f, -1.0f, -1.0f),  XMFLOAT3(0.0f, 0.0f, -1.0f),XMFLOAT2(1.0f, 1.0f) },
-        { XMFLOAT3(1.0f, 1.0f, -1.0f),  XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
+        { XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(0.0f, 2.0f) },
+        { XMFLOAT3(1.0f, -1.0f, -1.0f),  XMFLOAT3(0.0f, 0.0f, -1.0f),XMFLOAT2(2.0f, 2.0f) },
+        { XMFLOAT3(1.0f, 1.0f, -1.0f),  XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(2.0f, 0.0f) },
         { XMFLOAT3(-1.0f, 1.0f, -1.0f),  XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
 
         //Back
-        { XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(1.0f, 1.0f) },
-        { XMFLOAT3(1.0f, -1.0f, 1.0f),  XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(0.0f, 1.0f) },
-        { XMFLOAT3(1.0f, 1.0f, 1.0f),  XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
-        { XMFLOAT3(-1.0f, 1.0f, 1.0f),  XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
+        { XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT2(0.0f, 5.0f) },
+        { XMFLOAT3(1.0f, -1.0f, 1.0f),  XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT2(5.0f, 5.0f) },
+        { XMFLOAT3(1.0f, 1.0f, 1.0f),  XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT2(5.0f, 0.0f) },
+        { XMFLOAT3(-1.0f, 1.0f, 1.0f),  XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT2(0.0f, 0.0f) },
     };
 
     D3D11_BUFFER_DESC bd = {};
@@ -563,11 +563,11 @@ HRESULT InitDevice()
 
     // Load the Texture
     //hr = CreateDDSTextureFromFile(g_pd3dDevice, L"rocks.dds", nullptr, &wood_TextureRV);
-    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"rocks.dds", nullptr, &wood_TextureRV);
+    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Tiles.dds", nullptr, &wood_TextureRV);
     if (FAILED(hr))
         return hr;
 
-    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Wood.dds", nullptr, &wood_TextureRV1);
+    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Coin.dds", nullptr, &wood_TextureRV1);
     if (FAILED(hr))
         return hr;
 
@@ -604,7 +604,7 @@ HRESULT InitDevice()
     g_World = XMMatrixIdentity();
 
     // Initialize the view matrix
-    XMVECTOR Eye = XMVectorSet(0.0f, 5.0f, -6.0f, 0.0f);
+    XMVECTOR Eye = XMVectorSet(0.0f, 4.0f, -7.0f, 0.0f);
     XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
     XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
     g_View = XMMatrixLookAtLH(Eye, At, Up);

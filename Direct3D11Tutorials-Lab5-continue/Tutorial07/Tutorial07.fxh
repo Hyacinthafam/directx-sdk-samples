@@ -79,13 +79,17 @@ PS_INPUT VS( VS_INPUT input )
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
-float4 PS( PS_INPUT input, bool isFrontFace : SV_IsFrontFace) : SV_Target
+//float4 PS( PS_INPUT input, bool isFrontFace : SV_IsFrontFace) : SV_Target
+  float4 PS(PS_INPUT input) : SV_Target
 {
     float4 tileColor = txtileColor.Sample(txWoodsamSampler, input.Tex);
-    float4 woodColor = txWoodColor.Sample(txWoodsamSampler, input.Tex);
+    float4 woodColor = txWoodColor.Sample(txWoodsamSampler, input.Tex, 5);
     float4 newColor = tileColor * woodColor * 2.0;
     newColor = saturate(newColor);
 
     //return newColor;
     return woodColor;
+
+    //float4 Color = txtColor.SampleLevel(txSampler, input.Tex, 5);
+    //return Color;
 }
