@@ -29,26 +29,35 @@ using namespace DirectX;
 struct SimpleVertex
 {
     XMFLOAT3 Pos;
-    //XMFLOAT2 Tex;
-    XMFLOAT3 NORMAL;
-    XMFLOAT2 TEXCOORD;
+    XMFLOAT2 Tex;
+    //XMFLOAT3 NORMAL;
+    //XMFLOAT2 TEXCOORD;
 };
 
-struct CBNeverChanges
+
+struct ConstantBuffer
 {
+    XMMATRIX mWorld;
     XMMATRIX mView;
-};
-
-struct CBChangeOnResize
-{
     XMMATRIX mProjection;
 };
 
-struct CBChangesEveryFrame
-{
-    XMMATRIX mWorld;
-    XMFLOAT4 vMeshColor;
-};
+
+//struct CBNeverChanges
+//{
+//    XMMATRIX mView;
+//};
+//
+//struct CBChangeOnResize
+//{
+//    XMMATRIX mProjection;
+//};
+//
+//struct CBChangesEveryFrame
+//{
+//    XMMATRIX mWorld;
+//    XMFLOAT4 vMeshColor;
+//};
 
 
 //--------------------------------------------------------------------------------------
@@ -75,6 +84,7 @@ ID3D11PixelShader* g_pPixelShader = nullptr;
 ID3D11InputLayout* g_pVertexLayout = nullptr;
 ID3D11Buffer* g_pVertexBuffer = nullptr;
 ID3D11Buffer* g_pIndexBuffer = nullptr;
+ID3D11Buffer* g_pConstantBuffer = nullptr;
 ID3D11Buffer* g_pCBNeverChanges = nullptr;
 ID3D11Buffer* g_pCBChangeOnResize = nullptr;
 ID3D11Buffer* g_pCBChangesEveryFrame = nullptr;
@@ -220,7 +230,7 @@ HRESULT CompileShaderFromFile(const WCHAR* szFileName, LPCSTR szEntryPoint, LPCS
 HRESULT InitDevice()
 {
     HRESULT hr = S_OK;
-    // hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Wood.dds", nullptr, &wood_TextureRV);
+   // hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Wood.dds", nullptr, &wood_TextureRV);
     RECT rc;
     GetClientRect(g_hWnd, &rc);
     UINT width = rc.right - rc.left;
@@ -287,7 +297,55 @@ HRESULT InitDevice()
     if (FAILED(hr))
         return hr;
 
-    // Create swap chain
+    //// Create swap chain
+    //IDXGIFactory2* dxgiFactory2 = nullptr;
+    //hr = dxgiFactory->QueryInterface(__uuidof(IDXGIFactory2), reinterpret_cast<void**>(&dxgiFactory2));
+    //if (dxgiFactory2)
+    //{
+    //    // DirectX 11.1 or later
+    //    hr = g_pd3dDevice->QueryInterface(__uuidof(ID3D11Device1), reinterpret_cast<void**>(&g_pd3dDevice1));
+    //    if (SUCCEEDED(hr))
+    //    {
+    //        (void)g_pImmediateContext->QueryInterface(__uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&g_pImmediateContext1));
+    //    }
+
+    //    DXGI_SWAP_CHAIN_DESC1 sd = {};
+    //    sd.Width = width;
+    //    sd.Height = height;
+    //    sd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    //    sd.SampleDesc.Count = 1;
+    //    sd.SampleDesc.Quality = 0;
+    //    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+    //    sd.BufferCount = 1;
+
+    //    hr = dxgiFactory2->CreateSwapChainForHwnd(g_pd3dDevice, g_hWnd, &sd, nullptr, nullptr, &g_pSwapChain1);
+    //    if (SUCCEEDED(hr))
+    //    {
+    //        hr = g_pSwapChain1->QueryInterface(__uuidof(IDXGISwapChain), reinterpret_cast<void**>(&g_pSwapChain));
+    //    }
+
+    //    dxgiFactory2->Release();
+    //}
+    //else
+    //{
+    //    // DirectX 11.0 systems
+    //    DXGI_SWAP_CHAIN_DESC sd = {};
+    //    sd.BufferCount = 1;
+    //    sd.BufferDesc.Width = width;
+    //    sd.BufferDesc.Height = height;
+    //    sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    //    sd.BufferDesc.RefreshRate.Numerator = 60;
+    //    sd.BufferDesc.RefreshRate.Denominator = 1;
+    //    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+    //    sd.OutputWindow = g_hWnd;
+    //    sd.SampleDesc.Count = 1;
+    //    sd.SampleDesc.Quality = 0;
+    //    sd.Windowed = TRUE;
+
+    //    hr = dxgiFactory->CreateSwapChain(g_pd3dDevice, &sd, &g_pSwapChain);
+    //    //hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Wood.dds", nullptr, &wood_TextureRV);
+    //}
+       // Create swap chain
     IDXGIFactory2* dxgiFactory2 = nullptr;
     hr = dxgiFactory->QueryInterface(__uuidof(IDXGIFactory2), reinterpret_cast<void**>(&dxgiFactory2));
     if (dxgiFactory2)
@@ -333,9 +391,7 @@ HRESULT InitDevice()
         sd.Windowed = TRUE;
 
         hr = dxgiFactory->CreateSwapChain(g_pd3dDevice, &sd, &g_pSwapChain);
-        //hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Wood.dds", nullptr, &wood_TextureRV);
     }
-
     // Note this tutorial doesn't handle full-screen swapchains so we block the ALT+ENTER shortcut
     dxgiFactory->MakeWindowAssociation(g_hWnd, DXGI_MWA_NO_ALT_ENTER);
 
@@ -416,8 +472,8 @@ HRESULT InitDevice()
     D3D11_INPUT_ELEMENT_DESC layout[] =
     {
         { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "NORMAL", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        //{ "NORMAL", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
     UINT numElements = ARRAYSIZE(layout);
 
@@ -450,41 +506,72 @@ HRESULT InitDevice()
     // Create vertex buffer
     SimpleVertex vertices[] =
     {
-        //Top
-        { XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f) },
-        { XMFLOAT3(1.0f, 1.0f, -1.0f),  XMFLOAT3(0.0f, 1.0f, 0.0f),  XMFLOAT2(0.0f, 0.0f) },
-        { XMFLOAT3(1.0f, 1.0f, 1.0f),  XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f) },
-        { XMFLOAT3(-1.0f, 1.0f, 1.0f),  XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f) },
+        ////Top
+        //{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f) },
+        //{ XMFLOAT3(1.0f, 1.0f, -1.0f),  XMFLOAT3(0.0f, 1.0f, 0.0f),  XMFLOAT2(0.0f, 0.0f) },
+        //{ XMFLOAT3(1.0f, 1.0f, 1.0f),  XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f) },
+        //{ XMFLOAT3(-1.0f, 1.0f, 1.0f),  XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f) },
 
-        //Bottom
-        { XMFLOAT3(-1.0f, -1.0f, -1.0f),   XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f) },
-        { XMFLOAT3(1.0f, -1.0f, -1.0f),   XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f) },
-        { XMFLOAT3(1.0f, -1.0f, 1.0f),   XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f) },
-        { XMFLOAT3(-1.0f, -1.0f, 1.0f),   XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f) },
+        ////Bottom
+        //{ XMFLOAT3(-1.0f, -1.0f, -1.0f),   XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f) },
+        //{ XMFLOAT3(1.0f, -1.0f, -1.0f),   XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f) },
+        //{ XMFLOAT3(1.0f, -1.0f, 1.0f),   XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f) },
+        //{ XMFLOAT3(-1.0f, -1.0f, 1.0f),   XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f) },
 
-        //Left
-        { XMFLOAT3(-1.0f, -1.0f, 1.0f),  XMFLOAT3(-1.0f, 0.0f, 0.0f),  XMFLOAT2(0.0f, 1.0f) },
-        { XMFLOAT3(-1.0f, -1.0f, -1.0f),  XMFLOAT3(-1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f) },
-        { XMFLOAT3(-1.0f, 1.0f, -1.0f),  XMFLOAT3(-1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 0.0f) },
-        { XMFLOAT3(-1.0f, 1.0f, 1.0f),  XMFLOAT3(1 - .0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 0.0f) },
+        ////Left
+        //{ XMFLOAT3(-1.0f, -1.0f, 1.0f),  XMFLOAT3(-1.0f, 0.0f, 0.0f),  XMFLOAT2(0.0f, 1.0f) },
+        //{ XMFLOAT3(-1.0f, -1.0f, -1.0f),  XMFLOAT3(-1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f) },
+        //{ XMFLOAT3(-1.0f, 1.0f, -1.0f),  XMFLOAT3(-1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 0.0f) },
+        //{ XMFLOAT3(-1.0f, 1.0f, 1.0f),  XMFLOAT3(1-.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 0.0f) },
 
-        //Right
-        { XMFLOAT3(1.0f, -1.0f, 1.0f),  XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f) },
-        { XMFLOAT3(1.0f, -1.0f, -1.0f),  XMFLOAT3(1.0f, 0.0f, 0.0f),  XMFLOAT2(0.0f, 1.0f) },
-        { XMFLOAT3(1.0f, 1.0f, -1.0f),  XMFLOAT3(1.0f, 0.0f, 0.0f),  XMFLOAT2(0.0f, 0.0f) },
-        { XMFLOAT3(1.0f, 1.0f, 1.0f),  XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 0.0f) },
+        ////Right
+        //{ XMFLOAT3(1.0f, -1.0f, 1.0f),  XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f) },
+        //{ XMFLOAT3(1.0f, -1.0f, -1.0f),  XMFLOAT3(1.0f, 0.0f, 0.0f),  XMFLOAT2(0.0f, 1.0f) },
+        //{ XMFLOAT3(1.0f, 1.0f, -1.0f),  XMFLOAT3(1.0f, 0.0f, 0.0f),  XMFLOAT2(0.0f, 0.0f) },
+        //{ XMFLOAT3(1.0f, 1.0f, 1.0f),  XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 0.0f) },
 
-        //Front
-        { XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(0.0f, 1.0f) },
-        { XMFLOAT3(1.0f, -1.0f, -1.0f),  XMFLOAT3(0.0f, 0.0f, -1.0f),XMFLOAT2(1.0f, 1.0f) },
-        { XMFLOAT3(1.0f, 1.0f, -1.0f),  XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
-        { XMFLOAT3(-1.0f, 1.0f, -1.0f),  XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
+        ////Front
+        //{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(0.0f, 1.0f) },
+        //{ XMFLOAT3(1.0f, -1.0f, -1.0f),  XMFLOAT3(0.0f, 0.0f, -1.0f),XMFLOAT2(1.0f, 1.0f) },
+        //{ XMFLOAT3(1.0f, 1.0f, -1.0f),  XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
+        //{ XMFLOAT3(-1.0f, 1.0f, -1.0f),  XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
 
-        //Back
-        { XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(1.0f, 1.0f) },
-        { XMFLOAT3(1.0f, -1.0f, 1.0f),  XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(0.0f, 1.0f) },
-        { XMFLOAT3(1.0f, 1.0f, 1.0f),  XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
-        { XMFLOAT3(-1.0f, 1.0f, 1.0f),  XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
+        ////Back
+        //{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(1.0f, 1.0f) },
+        //{ XMFLOAT3(1.0f, -1.0f, 1.0f),  XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(0.0f, 1.0f) },
+        //{ XMFLOAT3(1.0f, 1.0f, 1.0f),  XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
+        //{ XMFLOAT3(-1.0f, 1.0f, 1.0f),  XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
+
+
+        { XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
+        { XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
+        { XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
+        { XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT2(1.0f, 1.0f) },
+
+        { XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
+        { XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
+        { XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT2(1.0f, 1.0f) },
+        { XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
+
+        { XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
+        { XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT2(1.0f, 1.0f) },
+        { XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
+        { XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 0.0f) },
+
+        { XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT2(1.0f, 1.0f) },
+        { XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT2(0.0f, 1.0f) },
+        { XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
+        { XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(1.0f, 0.0f) },
+
+        { XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT2(0.0f, 1.0f) },
+        { XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT2(1.0f, 1.0f) },
+        { XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
+        { XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
+
+        { XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT2(1.0f, 1.0f) },
+        { XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
+        { XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 0.0f) },
+        { XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT2(1.0f, 0.0f) },
     };
 
     D3D11_BUFFER_DESC bd = {};
@@ -544,14 +631,16 @@ HRESULT InitDevice()
 
     // Create the constant buffers
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(CBNeverChanges);
+    bd.ByteWidth = sizeof(ConstantBuffer);
+    //bd.ByteWidth = sizeof(CBNeverChanges);
     bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     bd.CPUAccessFlags = 0;
-    hr = g_pd3dDevice->CreateBuffer(&bd, nullptr, &g_pCBNeverChanges);
+    hr = g_pd3dDevice->CreateBuffer(&bd, nullptr, &g_pConstantBuffer);
+    //hr = g_pd3dDevice->CreateBuffer(&bd, nullptr, &g_pCBNeverChanges);
     if (FAILED(hr))
         return hr;
 
-    bd.ByteWidth = sizeof(CBChangeOnResize);
+   /* bd.ByteWidth = sizeof(CBChangeOnResize);
     hr = g_pd3dDevice->CreateBuffer(&bd, nullptr, &g_pCBChangeOnResize);
     if (FAILED(hr))
         return hr;
@@ -559,15 +648,15 @@ HRESULT InitDevice()
     bd.ByteWidth = sizeof(CBChangesEveryFrame);
     hr = g_pd3dDevice->CreateBuffer(&bd, nullptr, &g_pCBChangesEveryFrame);
     if (FAILED(hr))
-        return hr;
+        return hr;*/
 
     // Load the Texture
     //hr = CreateDDSTextureFromFile(g_pd3dDevice, L"rocks.dds", nullptr, &wood_TextureRV);
-    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"rocks.dds", nullptr, &wood_TextureRV);
+    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Coin.dds", nullptr, &wood_TextureRV);
     if (FAILED(hr))
         return hr;
 
-    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Wood.dds", nullptr, &wood_TextureRV1);
+   hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Tiles.dds", nullptr, &wood_TextureRV1);
     if (FAILED(hr))
         return hr;
 
@@ -584,8 +673,8 @@ HRESULT InitDevice()
     sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
     //hr = g_pd3dDevice->CreateSamplerState(&sampDesc, &g_pSamplerLinear);
     hr = g_pd3dDevice->CreateSamplerState(&sampDesc, &wood_Sampler);
-    if (FAILED(hr))
-        return hr;
+    //if (FAILED(hr))
+       // return hr;
 
     /*HRESULT CreateSamplerState(
         [in] const D3D11_SAMPLER_DESC* pSamplerDesc,
@@ -609,16 +698,16 @@ HRESULT InitDevice()
     XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
     g_View = XMMatrixLookAtLH(Eye, At, Up);
 
-    CBNeverChanges cbNeverChanges;
+  /*  CBNeverChanges cbNeverChanges;
     cbNeverChanges.mView = XMMatrixTranspose(g_View);
-    g_pImmediateContext->UpdateSubresource(g_pCBNeverChanges, 0, nullptr, &cbNeverChanges, 0, 0);
+    g_pImmediateContext->UpdateSubresource(g_pCBNeverChanges, 0, nullptr, &cbNeverChanges, 0, 0);*/
 
     // Initialize the projection matrix
     g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
 
-    CBChangeOnResize cbChangesOnResize;
+   /* CBChangeOnResize cbChangesOnResize;
     cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
-    g_pImmediateContext->UpdateSubresource(g_pCBChangeOnResize, 0, nullptr, &cbChangesOnResize, 0, 0);
+    g_pImmediateContext->UpdateSubresource(g_pCBChangeOnResize, 0, nullptr, &cbChangesOnResize, 0, 0);*/
 
     return S_OK;
 }
@@ -631,18 +720,34 @@ void CleanupDevice()
 {
     if (g_pImmediateContext) g_pImmediateContext->ClearState();
 
-    if (wood_Sampler) wood_Sampler->Release();
-    if (wood_TextureRV) wood_TextureRV->Release();
-    if (g_pCBNeverChanges) g_pCBNeverChanges->Release();
-    if (g_pCBChangeOnResize) g_pCBChangeOnResize->Release();
-    if (g_pCBChangesEveryFrame) g_pCBChangesEveryFrame->Release();
+    //if (g_pConstantBuffer) g_pConstantBuffer->Release();
+    ////if (wood_Sampler) wood_Sampler->Release();
+    ////if (wood_TextureRV) wood_TextureRV->Release();
+    ////if (wood_TextureRV) wood_TextureRV1->Release();
+    //if (g_pCBNeverChanges) g_pCBNeverChanges->Release();
+    //if (g_pCBChangeOnResize) g_pCBChangeOnResize->Release();
+    //if (g_pCBChangesEveryFrame) g_pCBChangesEveryFrame->Release();
+    //if (g_pVertexBuffer) g_pVertexBuffer->Release();
+    //if (g_pIndexBuffer) g_pIndexBuffer->Release();
+    //if (g_pVertexLayout) g_pVertexLayout->Release();
+    //if (g_pVertexShader) g_pVertexShader->Release();
+    //if (g_pPixelShader) g_pPixelShader->Release();
+    //if (g_pDepthStencil) g_pDepthStencil->Release();
+    //if (g_pDepthStencilView) g_pDepthStencilView->Release();
+    //if (g_pRenderTargetView) g_pRenderTargetView->Release();
+    //if (g_pSwapChain1) g_pSwapChain1->Release();
+    //if (g_pSwapChain) g_pSwapChain->Release();
+    //if (g_pImmediateContext1) g_pImmediateContext1->Release();
+    //if (g_pImmediateContext) g_pImmediateContext->Release();
+    //if (g_pd3dDevice1) g_pd3dDevice1->Release();
+    //if (g_pd3dDevice) g_pd3dDevice->Release();
+
+    if (g_pConstantBuffer) g_pConstantBuffer->Release();
     if (g_pVertexBuffer) g_pVertexBuffer->Release();
     if (g_pIndexBuffer) g_pIndexBuffer->Release();
     if (g_pVertexLayout) g_pVertexLayout->Release();
     if (g_pVertexShader) g_pVertexShader->Release();
     if (g_pPixelShader) g_pPixelShader->Release();
-    if (g_pDepthStencil) g_pDepthStencil->Release();
-    if (g_pDepthStencilView) g_pDepthStencilView->Release();
     if (g_pRenderTargetView) g_pRenderTargetView->Release();
     if (g_pSwapChain1) g_pSwapChain1->Release();
     if (g_pSwapChain) g_pSwapChain->Release();
@@ -716,34 +821,50 @@ void Render()
     //
     g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, Colors::MidnightBlue);
 
+    
 
+   // g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
 
-    // g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
-
-     //
-     // Clear the depth buffer to 1.0 (max depth)
-     //
+    //
+    // Clear the depth buffer to 1.0 (max depth)
+    //
     g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
     //
     // Update variables that change once per frame
     //
-    CBChangesEveryFrame cb;
+    /*CBChangesEveryFrame cb;
     cb.mWorld = XMMatrixTranspose(g_World);
     cb.vMeshColor = g_vMeshColor;
-    g_pImmediateContext->UpdateSubresource(g_pCBChangesEveryFrame, 0, nullptr, &cb, 0, 0);
+    g_pImmediateContext->UpdateSubresource(g_pCBChangesEveryFrame, 0, nullptr, &cb, 0, 0);*/
+
+    ConstantBuffer cb;
+    cb.mWorld = XMMatrixTranspose(g_World);
+    cb.mView = XMMatrixTranspose(g_View);
+    cb.mProjection = XMMatrixTranspose(g_Projection);
+    g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, &cb, 0, 0);
 
     //
     // Render the cube
     //
+   // g_pImmediateContext->VSSetShader(g_pVertexShader, nullptr, 0);
+   //// g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pCBNeverChanges);
+   // g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
+   // //g_pImmediateContext->VSSetConstantBuffers(1, 1, &g_pCBChangeOnResize);
+   // //g_pImmediateContext->VSSetConstantBuffers(2, 1, &g_pCBChangesEveryFrame);
+   // g_pImmediateContext->PSSetShader(g_pPixelShader, nullptr, 0);
+   // g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
+   // g_pImmediateContext->PSSetConstantBuffers(2, 1, &g_pCBChangesEveryFrame);
+   // g_pImmediateContext->PSSetShaderResources(0, 1, &wood_TextureRV1);
+   // g_pImmediateContext->PSSetShaderResources(0, 1, &wood_TextureRV);
+   // g_pImmediateContext->PSSetSamplers(0, 1, &wood_Sampler);
+   // g_pImmediateContext->DrawIndexed(36, 0, 0);
+
     g_pImmediateContext->VSSetShader(g_pVertexShader, nullptr, 0);
-    g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pCBNeverChanges);
-    g_pImmediateContext->VSSetConstantBuffers(1, 1, &g_pCBChangeOnResize);
-    g_pImmediateContext->VSSetConstantBuffers(2, 1, &g_pCBChangesEveryFrame);
+    g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
     g_pImmediateContext->PSSetShader(g_pPixelShader, nullptr, 0);
-    g_pImmediateContext->PSSetConstantBuffers(2, 1, &g_pCBChangesEveryFrame);
+    g_pImmediateContext->PSSetShaderResources(1, 1, &wood_TextureRV1);
     g_pImmediateContext->PSSetShaderResources(0, 1, &wood_TextureRV);
-    g_pImmediateContext->PSSetShaderResources(0, 1, &wood_TextureRV1);
     g_pImmediateContext->PSSetSamplers(0, 1, &wood_Sampler);
     g_pImmediateContext->DrawIndexed(36, 0, 0);
 

@@ -15,6 +15,8 @@ SamplerState txWoodsamSampler : register(s0);
 cbuffer cbNeverChanges : register( b0 )
 {
     matrix View;
+    //matrix World;
+   // matrix Projection;
 };
 
 cbuffer cbChangeOnResize : register( b1 )
@@ -30,13 +32,20 @@ cbuffer cbChangesEveryFrame : register( b2 )
 
 
 //--------------------------------------------------------------------------------------
+struct VS_OUTPUT
+{
+    float4 Pos : SV_POSITION;
+    float4 Color : COLOR0;
+};
+
+
 struct VS_INPUT
 {
     //float4 Pos : POSITION;
     //float2 Tex : TEXCOORD0;
 
     float4 Pos : POSITION;
-    float3 Norm : NORMAL;
+    //float3 Norm : NORMAL;
     float2 Tex : TEXCOORD0;
 };
 
@@ -47,7 +56,7 @@ struct PS_INPUT
 
     float4 Pos : SV_POSITION;
     float2 Tex : TEXCOORD0;
-    float3 Norm : TEXCOORD1;
+    //float3 Norm : TEXCOORD1;
 };
 
 
