@@ -567,7 +567,7 @@ HRESULT InitDevice()
     if (FAILED(hr))
         return hr;
 
-    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Coin.dds", nullptr, &wood_TextureRV1);
+    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"rocks.dds", nullptr, &wood_TextureRV1);
     if (FAILED(hr))
         return hr;
 

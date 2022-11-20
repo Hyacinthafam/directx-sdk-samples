@@ -45,7 +45,7 @@ struct VS_INPUT
     //float2 Tex : TEXCOORD0;
 
     float4 Pos : POSITION;
-    //float3 Norm : NORMAL;
+    float3 Norm : NORMAL;
     float2 Tex : TEXCOORD0;
 };
 
@@ -56,7 +56,7 @@ struct PS_INPUT
 
     float4 Pos : SV_POSITION;
     float2 Tex : TEXCOORD0;
-    //float3 Norm : TEXCOORD1;
+    float3 Norm : TEXCOORD1;
 };
 
 
@@ -79,17 +79,17 @@ PS_INPUT VS( VS_INPUT input )
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
-//float4 PS( PS_INPUT input, bool isFrontFace : SV_IsFrontFace) : SV_Target
-  float4 PS(PS_INPUT input) : SV_Target
+float4 PS( PS_INPUT input, bool isFrontFace : SV_IsFrontFace) : SV_Target
+  //float4 PS(PS_INPUT input) : SV_Target
 {
     float4 tileColor = txtileColor.Sample(txWoodsamSampler, input.Tex);
     float4 woodColor = txWoodColor.Sample(txWoodsamSampler, input.Tex, 5);
     float4 newColor = tileColor * woodColor * 2.0;
     newColor = saturate(newColor);
 
-    //return newColor;
+   // return newColor;
     return woodColor;
 
-    //float4 Color = txtColor.SampleLevel(txSampler, input.Tex, 5);
+    //float4 Color = txColor.SampleLevel(txSampler, input.Tex, 5);
     //return Color;
 }
