@@ -555,11 +555,11 @@ HRESULT InitDevice()
 
 
     // Load the Texture
-    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Wood.dds", nullptr, &wood_TextureRV);
+    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Coin.dds", nullptr, &wood_TextureRV);
     if (FAILED(hr))
         return hr;
 
-    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Rocks.dds", nullptr, &wood_TextureRV1);
+    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Tiles.dds", nullptr, &wood_TextureRV1);
     if (FAILED(hr))
         return hr;
 

@@ -12,6 +12,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tutorial04.cpp" />
+    <ClCompile Include="..\Tutorial07\DDSTextureLoader.cpp" />
+    <ClCompile Include="DDSTextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">
@@ -20,6 +22,8 @@
     <ResourceCompile Include="Tutorial04.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+    <ClInclude Include="..\Tutorial07\DDSTextureLoader.h" />
+    <ClInclude Include="DDSTextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Tutorial04_PS.hlsl">
@@ -28,10 +32,18 @@
     <FxCompile Include="Tutorial04_VS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="VS2.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Tutorial04.fxh">
       <Filter>Shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Wood.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
