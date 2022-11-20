@@ -486,13 +486,13 @@ HRESULT InitDevice()
 
         { XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 5.0f) },
         { XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT2(5.0f, 5.0f) },
-        { XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(5.0f, 0.0f) },
+       { XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(5.0f, 0.0f) },
         { XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT2(1.0f, 0.0f) },
     };
 
     D3D11_BUFFER_DESC bd = {};
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(SimpleVertex) * 20;
+    bd.ByteWidth = sizeof(SimpleVertex) * 24;
     bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     bd.CPUAccessFlags = 0;
 
@@ -555,11 +555,11 @@ HRESULT InitDevice()
 
 
     // Load the Texture
-    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Coin.dds", nullptr, &wood_TextureRV);
+    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Wood.dds", nullptr, &wood_TextureRV);
     if (FAILED(hr))
         return hr;
 
-    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"Wood.dds", nullptr, &wood_TextureRV1);
+    hr = CreateDDSTextureFromFile(g_pd3dDevice, L"rocks.dds", nullptr, &wood_TextureRV1);
     if (FAILED(hr))
         return hr;
 
