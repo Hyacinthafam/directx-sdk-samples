@@ -390,16 +390,31 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="VS2.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Tutorial07\DDSTextureLoader.cpp" />
+    <ClCompile Include="DDSTextureLoader.cpp" />
     <ClCompile Include="Tutorial04.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Tutorial07\DDSTextureLoader.h" />
+    <ClInclude Include="DDSTextureLoader.h" />
     <CLInclude Include="resource.h" />
     <ResourceCompile Include="Tutorial04.rc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Tutorial04.fxh" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Wood.dds" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
