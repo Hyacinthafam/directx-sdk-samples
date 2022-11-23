@@ -551,11 +551,16 @@ HRESULT InitDevice()
 	g_World = XMMatrixIdentity();
 
     // Initialize the view matrix
-	XMVECTOR Eye = XMVectorSet( 0.0f, 0.5f, -3.0f, 0.0f );
-	XMVECTOR At = XMVectorSet( 1.0f, 1.0f, 0.0f, 0.0f );
+	XMVECTOR Eye = XMVectorSet( 0.0f, 0.0f, -4.0f, 0.0f );
+	XMVECTOR At = XMVectorSet( 1.0f, 1.0f, 3.0f, 0.0f );
 	XMVECTOR Up = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
 	g_View = XMMatrixLookAtLH( Eye, At, Up );
 
+
+    /*XMVECTOR Eye = XMVectorSet(0.0f, 4.0f, -3.0f, 0.0f);
+    XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+    XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+    g_View = XMMatrixLookAtLH(Eye, At, Up);*/
     // Initialize the projection matrix
 	g_Projection = XMMatrixPerspectiveFovLH( XM_PIDIV2, width / (FLOAT)height, 0.01f, 100.0f );
 
@@ -643,7 +648,7 @@ void Render()
 
     XMMATRIX ScaledCube = XMMatrixScaling(1.f, 1.f, 2.f);
 
-	g_World = XMMatrixRotationY(0.1f) /** ScaledCube*/;
+	g_World = XMMatrixRotationY(t) /** ScaledCube*/;
 
     //
     // Clear the back buffer
