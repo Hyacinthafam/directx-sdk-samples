@@ -67,8 +67,21 @@ PS_INPUT VS(VS_INPUT input)
 
 float4 PS(PS_INPUT input, bool isFrontFace : SV_IsFrontFace) : SV_Target
 {
+        // float    x = BumpDensity * input.Tex.x,
+        //y = BumpDensity * input.Tex.y;
+        //float3Normal = bumpNormal(x, y);
 
 
+
+        //float3  bumpNormal(float2 xy) {
+        //    float3 N = vec3(0.0, 0.0, 1.0);
+        //    //map xyto [-1, 1]x[-1, 1]:
+        //    float2 st = 2.0 * fract(xy) - 1.0;
+        //    float R2 = radius * radius - dot(st, st);
+        //    if (R2 > 0.0) {
+        //        N.xy = st / sqrt(R2);
+        //        return normalize(N);
+        //    }
     //float3 NormalAsCol = tex2D(bumpMap, Texcoord).xyz;
     //float3 NormalFrCol = normalize(2.0 * NormalAsCol - 1.0);
     float4 stoneColor = txWoodColor.Sample(txWoodsamSampler, input.Tex);
