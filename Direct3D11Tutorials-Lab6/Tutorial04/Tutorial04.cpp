@@ -538,13 +538,14 @@ HRESULT InitDevice()
 
     // Create the sample state
     D3D11_SAMPLER_DESC sampDesc = {};
-    sampDesc.Filter = D3D11_FILTER_MAXIMUM_ANISOTROPIC;
+    //sampDesc.Filter = D3D11_FILTER_MAXIMUM_ANISOTROPIC;
+    sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
     sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
     sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-    sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-    sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-    sampDesc.MinLOD = 0;
-    sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+    //sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+    //sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+   // sampDesc.MinLOD = 0;
+   // sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
     hr = g_pd3dDevice->CreateSamplerState(&sampDesc, &wood_Sampler);
 
     // Initialize the world matrix

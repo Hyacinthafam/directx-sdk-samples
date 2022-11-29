@@ -43,29 +43,34 @@ struct PS_INPUT
     float3 Norm : TEXCOORD1;
     float3 viewDirInTang : TEXCOORD2;
     float3 lightDirInTang : TEXCOORD3;
+    float3 tangent: TANGENT;
 };
 
 //--------------------------------------------------------------------------------------
 // Vertex Shader
 //--------------------------------------------------------------------------------------
-PS_INPUT VS( VS_INPUT input )
-{    
-    PS_INPUT output = (PS_INPUT) 0;
+PS_INPUT VS(VS_INPUT input)
+{
+    PS_INPUT output = (PS_INPUT)0;
     output.Pos = mul(input.Pos, World);
     output.Pos = mul(output.Pos, View);
     output.Pos = mul(output.Pos, Projection);
     output.Tex = input.Tex;
     //output.Norm = mul(float4(input.Norm, 1), World).xyz;
-    
+
     return output;
 }
-
+//PixelInputType BumpMapVertexShader(VertexInputType input)
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
 
 float4 PS(PS_INPUT input, bool isFrontFace : SV_IsFrontFace) : SV_Target
 {
+
+
+    //float3 NormalAsCol = tex2D(bumpMap, Texcoord).xyz;
+    //float3 NormalFrCol = normalize(2.0 * NormalAsCol - 1.0);
     float4 stoneColor = txWoodColor.Sample(txWoodsamSampler, input.Tex);
     float4 bmpFile = txWoodColor.Sample(txWoodsamSampler, input.Tex);
     float4 newColor = stoneColor * bmpFile;
