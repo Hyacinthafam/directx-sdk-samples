@@ -51,7 +51,7 @@ VS_OUTPUT VS_main(float4 Pos : POSITION, float4 Color : COLOR)
     //Rotation
     float angle = 150.0f;
     float3x3 rMatrix = float3x3(
-        cos(angle), 0, -sin(angle),
+        cos(angle), 0, -sin(angle), 
         0, 1, 0,
         sin(angle), 0, cos(angle)
         );
@@ -68,7 +68,20 @@ VS_OUTPUT VS_main(float4 Pos : POSITION, float4 Color : COLOR)
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
-float4 PS( VS_OUTPUT input ) : SV_Target
+float4 PS(VS_OUTPUT input) : SV_Target
 {
-    return input.Color;
+    float4 colors = float4(0.7f,0.5f,0.3f,0.6f);
+    return colors;
+}
+float4 PS2(VS_OUTPUT input) : SV_Target
+{
+    
+    float4 colors = float4(1.7f,1.5f,1.3f,1.6f);
+    return colors;
+}
+
+float4 PS3(VS_OUTPUT input) : SV_Target
+{
+    float4 colors = float4(0.7f,0.5f,0.3f,0.6f);
+    return colors;
 }
