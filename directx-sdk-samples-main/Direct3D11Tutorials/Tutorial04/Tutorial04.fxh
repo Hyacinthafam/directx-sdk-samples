@@ -25,13 +25,39 @@ struct VS_OUTPUT
 //--------------------------------------------------------------------------------------
 // Vertex Shader
 //--------------------------------------------------------------------------------------
-VS_OUTPUT VS( float4 Pos : POSITION, float4 Color : COLOR )
+VS_OUTPUT VS( float4 Pos : POSITION, float4 Color : COLOR, float3 Norm : NORMAL )
 {
     VS_OUTPUT output = (VS_OUTPUT)0;
     output.Pos = mul( Pos, World );
     output.Pos = mul( output.Pos, View );
     output.Pos = mul( output.Pos, Projection );
-    output.Color = Color;
+    //output.Color = Color;
+
+    if (Norm.z == -1.0f)
+    {
+        output.Color = float4(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+    else if (Norm.z == 1.0f)
+    {
+        output.Color = float4(0.4f, 0.1f, 0.7f, 1.0f);
+    }
+    else if (Norm.y == -1.0f)
+    {
+        output.Color = float4(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+    else if (Norm.y == 1.0f)
+    {
+        output.Color = float4(0.0f, 1.0f, 0.0f, 1.0f);
+    }
+    else if (Norm.x == -1.0f)
+    {
+        output.Color = float4(1.0f, 0.0f, 0.0f, 1.0f);
+    }
+    else if (Norm.x == 1.0f)
+    {
+        output.Color = float4(1.0f, 0.5f, 0.5f, 1.0f);
+    }
+    
     return output;
 }
 
@@ -70,7 +96,7 @@ VS_OUTPUT VS_main(float4 Pos : POSITION, float4 Color : COLOR)
 //--------------------------------------------------------------------------------------
 float4 PS(VS_OUTPUT input) : SV_Target
 {
-    float4 colors = float4(0.3f,1.0f,1.0f,1.0f);
+    float4 colors = float4(-1.0f,1.0f,0.0f,1.0f);
     return colors;
 }
 float4 PS2(VS_OUTPUT input) : SV_Target

@@ -29,6 +29,7 @@ struct SimpleVertex
 {
     XMFLOAT3 Pos;
     XMFLOAT4 Color;
+    XMFLOAT3 Norm;
 };
 
 
@@ -55,11 +56,15 @@ IDXGISwapChain*         g_pSwapChain = nullptr;
 IDXGISwapChain1*        g_pSwapChain1 = nullptr;
 ID3D11RenderTargetView* g_pRenderTargetView = nullptr;
 ID3D11VertexShader*     g_pVertexShader = nullptr;
+ID3D11VertexShader* g_pVertexShader_1 = nullptr;
+ID3D11VertexShader* g_pVertexShader_2 = nullptr;
+ID3D11VertexShader* g_pVertexShader_3 = nullptr;
 ID3D11PixelShader*      g_pPixelShader = nullptr;
 ID3D11PixelShader*      g_pPixelShader_1 = nullptr;
 ID3D11PixelShader* g_pPixelShader_2 = nullptr;
 ID3D11PixelShader* g_pPixelShader_3 = nullptr;
 ID3D11InputLayout*      g_pVertexLayout = nullptr;
+ID3D11InputLayout* g_pVertexLayout_1 = nullptr;
 ID3D11Buffer*           g_pVertexBuffer = nullptr;
 ID3D11Buffer*           g_pIndexBuffer = nullptr;
 ID3D11Buffer*           g_pConstantBuffer = nullptr;
@@ -351,7 +356,7 @@ HRESULT InitDevice()
 
     // Compile the vertex shader
     ID3DBlob* pVSBlob = nullptr;
-    hr = CompileShaderFromFile( L"Tutorial04.fxh", "VS", "vs_4_0", &pVSBlob );
+    hr = CompileShaderFromFile( L"Tutorial04.fxh", "VS", "vs_4_0", &pVSBlob);
     if( FAILED( hr ) )
     {
         MessageBox( nullptr,
@@ -360,10 +365,10 @@ HRESULT InitDevice()
     }
 
 	// Create the vertex shader
-	hr = g_pd3dDevice->CreateVertexShader( pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), nullptr, &g_pVertexShader );
+    hr = g_pd3dDevice->CreateVertexShader( pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), nullptr, &g_pVertexShader_1 );
 	if( FAILED( hr ) )
 	{	
-		pVSBlob->Release();
+        pVSBlob->Release();
         return hr;
 	}
 
@@ -372,13 +377,14 @@ HRESULT InitDevice()
     {
         { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
         { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+         { "NORMAL", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 	UINT numElements = ARRAYSIZE( layout );
 
     // Create the input layout
 	hr = g_pd3dDevice->CreateInputLayout( layout, numElements, pVSBlob->GetBufferPointer(),
-                                          pVSBlob->GetBufferSize(), &g_pVertexLayout );
-	pVSBlob->Release();
+                                  pVSBlob->GetBufferSize(), &g_pVertexLayout );
+    pVSBlob->Release();
 	if( FAILED( hr ) )
         return hr;
 
@@ -437,14 +443,14 @@ HRESULT InitDevice()
     // Create vertex buffer
     SimpleVertex vertices[] =
     {
-        { XMFLOAT3( -1.0f, 1.0f, -1.0f ), XMFLOAT4( 0.0f, 0.0f, 1.0f, 1.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, -1.0f ), XMFLOAT4( 0.0f, 1.0f, 0.0f, 1.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, 1.0f ), XMFLOAT4( 0.0f, 1.0f, 1.0f, 1.0f ) },
-        { XMFLOAT3( -1.0f, 1.0f, 1.0f ), XMFLOAT4( 1.0f, 0.0f, 0.0f, 1.0f ) },
-        { XMFLOAT3( -1.0f, -1.0f, -1.0f ), XMFLOAT4( 1.0f, 0.0f, 1.0f, 1.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, -1.0f ), XMFLOAT4( 1.0f, 1.0f, 0.0f, 1.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, 1.0f ), XMFLOAT4( 1.0f, 1.0f, 1.0f, 1.0f ) },
-        { XMFLOAT3( -1.0f, -1.0f, 1.0f ), XMFLOAT4( 0.0f, 0.0f, 0.0f, 1.0f ) },
+        { XMFLOAT3( -1.0f, 1.0f, -1.0f ), XMFLOAT4( 0.0f, 0.0f, 1.0f, 1.0f ), XMFLOAT3(0.0f, 0.0f, 1.0f) },
+        { XMFLOAT3( 1.0f, 1.0f, -1.0f ), XMFLOAT4( 0.0f, 1.0f, 0.0f, 1.0f ) , XMFLOAT3(0.0f, 0.0f, 1.0f)},
+        { XMFLOAT3( 1.0f, 1.0f, 1.0f ), XMFLOAT4( 0.0f, 1.0f, 1.0f, 1.0f ) , XMFLOAT3(0.0f, 0.0f, 1.0f)},
+        { XMFLOAT3( -1.0f, 1.0f, 1.0f ), XMFLOAT4( 1.0f, 0.0f, 0.0f, 1.0f ) , XMFLOAT3(0.0f, 0.0f, 1.0f)},
+        { XMFLOAT3( -1.0f, -1.0f, -1.0f ), XMFLOAT4( 1.0f, 0.0f, 1.0f, 1.0f ) , XMFLOAT3(0.0f, 0.0f, 1.0f)},
+        { XMFLOAT3( 1.0f, -1.0f, -1.0f ), XMFLOAT4( 1.0f, 1.0f, 0.0f, 1.0f ), XMFLOAT3(0.0f, 0.0f, 1.0f)} ,
+        { XMFLOAT3( 1.0f, -1.0f, 1.0f ), XMFLOAT4( 1.0f, 1.0f, 1.0f, 1.0f ) ,  XMFLOAT3(0.0f, 0.0f, 1.0f)},
+        { XMFLOAT3( -1.0f, -1.0f, 1.0f ), XMFLOAT4( 0.0f, 0.0f, 0.0f, 1.0f ), XMFLOAT3(0.0f, 0.0f, 1.0f) },
     };
     D3D11_BUFFER_DESC bd = {};
     bd.Usage = D3D11_USAGE_DEFAULT;
@@ -512,7 +518,7 @@ HRESULT InitDevice()
 	g_World = XMMatrixIdentity();
 
     // Initialize the view matrix
-	XMVECTOR Eye = XMVectorSet( 0.0f, 1.0f, -5.0f, 0.0f );
+	XMVECTOR Eye = XMVectorSet( 0.0f, 1.0f, -7.0f, 0.0f );
 	XMVECTOR At = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
 	XMVECTOR Up = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
 	g_View = XMMatrixLookAtLH( Eye, At, Up );
@@ -603,6 +609,7 @@ void Render()
     // Animate the cube
     //
 	g_World = XMMatrixRotationY( 0 );
+    XMMATRIX mScale = XMMatrixScaling(5.0f, 5.0f, -5.5f);
 
     g_World2 = XMMatrixRotationY(t);
     //XMMATRIX mSpin2 = XMMatrixRotationZ(-t);
@@ -632,7 +639,7 @@ void Render()
     // Update variables
     //
     ConstantBuffer cb;
-	cb.mWorld = XMMatrixTranspose( g_World );
+	cb.mWorld = XMMatrixTranspose( g_World * mScale );
 	cb.mView = XMMatrixTranspose( g_View );
 	cb.mProjection = XMMatrixTranspose( g_Projection );
 	g_pImmediateContext->UpdateSubresource( g_pConstantBuffer, 0, nullptr, &cb, 0, 0 );
@@ -640,7 +647,7 @@ void Render()
     //
     // Renders a triangle
     //
-	g_pImmediateContext->VSSetShader( g_pVertexShader, nullptr, 0 );
+	g_pImmediateContext->VSSetShader( g_pVertexShader_1, nullptr, 0 );
 	g_pImmediateContext->VSSetConstantBuffers( 0, 1, &g_pConstantBuffer );
 	g_pImmediateContext->PSSetShader( g_pPixelShader_1, nullptr, 0 );
 	g_pImmediateContext->DrawIndexed( 36, 0, 0 );        // 36 vertices needed for 12 triangles in a triangle list
