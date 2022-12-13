@@ -30,6 +30,7 @@ struct SimpleVertex
     XMFLOAT3 Pos;
     XMFLOAT4 Color;
     XMFLOAT3 Norm;
+    XMFLOAT3 Normal;
 };
 
 
@@ -38,6 +39,9 @@ struct ConstantBuffer
 	XMMATRIX mWorld;
 	XMMATRIX mView;
 	XMMATRIX mProjection;
+    XMVECTOR lightPos;
+    XMVECTOR g_LightPosition = XMVectorSet(5.0f, 10.0f, 0.0f, 0.0f);
+
 };
 
 
@@ -56,15 +60,15 @@ IDXGISwapChain*         g_pSwapChain = nullptr;
 IDXGISwapChain1*        g_pSwapChain1 = nullptr;
 ID3D11RenderTargetView* g_pRenderTargetView = nullptr;
 ID3D11VertexShader*     g_pVertexShader = nullptr;
-ID3D11VertexShader* g_pVertexShader_1 = nullptr;
-ID3D11VertexShader* g_pVertexShader_2 = nullptr;
-ID3D11VertexShader* g_pVertexShader_3 = nullptr;
+ID3D11VertexShader*     g_pVertexShader_1 = nullptr;
+ID3D11VertexShader*     g_pVertexShader_2 = nullptr;
+ID3D11VertexShader*     g_pVertexShader_3 = nullptr;
 ID3D11PixelShader*      g_pPixelShader = nullptr;
 ID3D11PixelShader*      g_pPixelShader_1 = nullptr;
-ID3D11PixelShader* g_pPixelShader_2 = nullptr;
-ID3D11PixelShader* g_pPixelShader_3 = nullptr;
+ID3D11PixelShader*      g_pPixelShader_2 = nullptr;
+ID3D11PixelShader*      g_pPixelShader_3 = nullptr;
 ID3D11InputLayout*      g_pVertexLayout = nullptr;
-ID3D11InputLayout* g_pVertexLayout_1 = nullptr;
+ID3D11InputLayout*      g_pVertexLayout_1 = nullptr;
 ID3D11Buffer*           g_pVertexBuffer = nullptr;
 ID3D11Buffer*           g_pIndexBuffer = nullptr;
 ID3D11Buffer*           g_pConstantBuffer = nullptr;
@@ -73,6 +77,9 @@ XMMATRIX                g_World2;
 XMMATRIX                g_World3;
 XMMATRIX                g_View;
 XMMATRIX                g_Projection;
+ID3D11Texture2D*        g_pDepthStencil = nullptr;
+ID3D11DepthStencilView* g_pDepthStencilView = nullptr;
+
 
 
 //--------------------------------------------------------------------------------------
@@ -331,6 +338,37 @@ HRESULT InitDevice()
     if (FAILED(hr))
         return hr;
 
+
+    //creating depth stencil texture
+    D3D11_TEXTURE2D_DESC descDepth = {};
+    descDepth.Width = width;
+    descDepth.Height = height;
+    descDepth.MipLevels = 1;
+    descDepth.ArraySize = 1;
+    descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+    descDepth.SampleDesc.Count = 1;
+    descDepth.SampleDesc.Quality = 0;
+    descDepth.Usage = D3D11_USAGE_DEFAULT;
+    descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+    descDepth.CPUAccessFlags = 0;
+    descDepth.MiscFlags = 0;
+
+    hr = g_pd3dDevice->CreateTexture2D(&descDepth, nullptr, &g_pDepthStencil);
+    if (FAILED(hr))
+        return hr;
+
+
+    //creating depth stencil view
+    D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
+    descDSV.Format = descDepth.Format;
+    descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+    descDSV.Texture2D.MipSlice = 0;
+
+    hr = g_pd3dDevice->CreateDepthStencilView(g_pDepthStencil, &descDSV, &g_pDepthStencilView);
+    if (FAILED(hr))
+        return hr;
+
+
     // Create a render target view
     ID3D11Texture2D* pBackBuffer = nullptr;
     hr = g_pSwapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), reinterpret_cast<void**>( &pBackBuffer ) );
@@ -377,7 +415,9 @@ HRESULT InitDevice()
     {
         { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
         { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-         { "NORMAL", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+         //{ "NORMAL", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+         { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+
 	};
 	UINT numElements = ARRAYSIZE( layout );
 
@@ -489,6 +529,25 @@ HRESULT InitDevice()
 
         6,4,5,
         7,4,6,
+
+       /*  3,1,0,
+        2,1,3,
+
+        6,4,5,
+        7,4,6,
+
+        11,9,8,
+        10,9,11,
+
+        14,12,13,
+        15,12,14,
+
+        19,17,16,
+        18,17,19,
+
+        22,20,21,
+        23,20,22*/
+
     };
     bd.Usage = D3D11_USAGE_DEFAULT;
     bd.ByteWidth = sizeof( WORD ) * 36;        // 36 vertices needed for 12 triangles in a triangle list
@@ -608,7 +667,7 @@ void Render()
     //
     // Animate the cube
     //
-	g_World = XMMatrixRotationY( 0 );
+	g_World = XMMatrixRotationY( t );
     XMMATRIX mScale = XMMatrixScaling(5.0f, 5.0f, -5.5f);
 
     g_World2 = XMMatrixRotationY(t);
@@ -631,6 +690,15 @@ void Render()
     g_World3 = mScale3 * /*mSpin2 */  mTranslate3;//mOrbit2;
 
     //
+    
+    g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView,
+    g_pDepthStencilView);
+
+
+    g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView,
+    D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+
     // Clear the back buffer
     //
     g_pImmediateContext->ClearRenderTargetView( g_pRenderTargetView, Colors::MidnightBlue );
@@ -639,7 +707,7 @@ void Render()
     // Update variables
     //
     ConstantBuffer cb;
-	cb.mWorld = XMMatrixTranspose( g_World * mScale );
+	cb.mWorld = XMMatrixTranspose( g_World);
 	cb.mView = XMMatrixTranspose( g_View );
 	cb.mProjection = XMMatrixTranspose( g_Projection );
 	g_pImmediateContext->UpdateSubresource( g_pConstantBuffer, 0, nullptr, &cb, 0, 0 );
